@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-vm#q==d4wbtg)sw#4(o$qi56ys*2coi^4y+a!cv@!ai-8&-r7a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "jairo-openai-service.azurewebsites.net"]
 
 
 # Application definition
