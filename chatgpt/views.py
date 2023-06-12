@@ -28,7 +28,12 @@ def api_root(request, format=None):
 @api_view(["GET"])
 def hello_world(request):
     """Function to define hello world view"""
-    return Response({"message": "Hello, world! the time is " + str(datetime.now())})
+    return Response(
+        {
+            "message": "Hello World! Now is "
+            + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        }
+    )
 
 
 @api_view(["GET"])
