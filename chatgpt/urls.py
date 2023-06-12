@@ -12,6 +12,8 @@ urlpatterns = [
         views.ChatGPTRetriveUpdateDestroy.as_view(),
         name="chatgpt-detail",
     ),
+    path("hello/", views.hello_world, name="hello-world"),
+    path("keywords/", views.generate_keywords, name="generate-keywords"),
     path("", views.api_root),
 ]
 

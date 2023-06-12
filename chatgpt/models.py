@@ -4,9 +4,10 @@ from django.db import models
 # Create your models here.
 class ChatGPT(models.Model):
     name = models.CharField(max_length=100, null=True, default="")
-    system_input = models.CharField(max_length=100)
-    user_input = models.CharField(max_length=100)
-    bot_response = models.CharField(max_length=100)
+    system_input = models.TextField(max_length=200, null=True, default="")
+    user_prompt = models.TextField(max_length=200, null=True, default="")
+    assistant_prompt = models.TextField(max_length=200, null=True, default="")
+    bot_response = models.TextField(max_length=200, null=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
