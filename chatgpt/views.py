@@ -43,7 +43,7 @@ def hello_world(request):
     )
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def generate_keywords(request):
     """Function to define generate keywords view"""
     response = openai.ChatCompletion.create(
