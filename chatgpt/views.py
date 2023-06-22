@@ -50,11 +50,12 @@ def generate_keywords(request):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
+            {"role": "user", "content": user_prompt},  # get user_prompt from request
         ],
     )
 
     print(response["choices"][0]["message"]["content"])
+
     return Response(
         {
             "system_prompt": system_prompt,
