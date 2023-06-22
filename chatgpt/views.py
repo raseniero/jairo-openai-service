@@ -16,8 +16,6 @@ from .serializers import ChatGPTSerializer
 # Create your views here.
 # You have the options to use other API key or the secret key
 openai.api_key = "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"
-system_prompt = 'I\'m going to paste in a timecode script and I want you to find people, places, things and phrases that you think would help move the story along visually for each timecode spot, write one keyword or phrase and make a list:  \r\n\r\nThe timecode script looks like this:\r\n1 00:00:00,000 --> 00:00:01,800 What would you do if you had  \r\n2 00:00:01,800 --> 00:00:03,433 wandered into a canyon  \r\n3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear  \r\n4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that  \r\n5 00:00:07,866 --> 00:00:09,999 fly me to the moon\r\n\r\nOutput should look like this:\r\n1 00:00:01,800: "Decision Making"'
-user_prompt = "1 00:00:00,000 --> 00:00:01,800 What would you do if you had  \r\n2 00:00:01,800 --> 00:00:03,433 wandered into a canyon  \r\n3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear  \r\n4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that  \r\n5 00:00:07,866 --> 00:00:09,699 supposedly live and hide"
 
 
 @api_view(["GET"])
@@ -46,6 +44,11 @@ def hello_world(request):
 
 @api_view(["POST"])
 def generate_keywords(request):
+    # Retrieve the user_prompt from the request data
+    user_prompt = request.data.get('user_prompt')
+
+    # Define the system_prompt
+    system_prompt = "I'm going to paste in a timecode script and I want you to find people, places, things and phrases that you think would help move the story along visually for each timecode spot, write one keyword or phrase and make a list:  \r\n\r\nThe timecode script looks like this:\r\n1 00:00:00,000 --> 00:00:01,800 What would you do if you had  \r\n2 00:00:01,800 --> 00:00:03,433 wandered into a canyon  \r\n3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear  \r\n4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that  \r\n5 00:00:07,866 --> 00:00:09,999 fly me to the moon\r\n\r\nOutput should look like this:\r\n1 00:00:01,800: \"Decision Making\""
     """Function to define generate keywords view"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
