@@ -95,7 +95,7 @@ class ImageGenerationView(APIView):
             max_tokens=50,
             temperature=0.7,
             top_p=1.0,
-            n=1,
+            n=len(prompt),
             stop=None,
         )
 
