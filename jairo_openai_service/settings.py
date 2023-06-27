@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
+import ast
+from dotenv import load_dotenv
 from pathlib import Path
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +30,18 @@ SECRET_KEY = "django-insecure-vm#q==d4wbtg)sw#4(o$qi56ys*2coi^4y+a!cv@!ai-8&-r7a
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "jairo-openai-service.azurewebsites.net"]
+
+
+load_dotenv()
+# Get the API keys list as a string from the environment variable
+api_keys_str = os.environ.get('API_KEYS')
+# Parse the string into a Python list
+API_KEYS = ast.literal_eval(api_keys_str)
+
+
+
+
+
 
 
 # Application definition

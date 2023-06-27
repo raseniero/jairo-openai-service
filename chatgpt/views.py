@@ -8,14 +8,24 @@ from rest_framework.reverse import reverse
 from rest_framework import generics
 import requests
 import openai
+from rest_framework.views import APIView
+
+from jairo_openai_service import settings
 
 from .models import ChatGPT
 from .serializers import ChatGPTSerializer
 
+api_key_1 = settings.API_KEYS[0]
+api_key_2 = settings.API_KEYS[1]
+
 
 # Create your views here.
 # You have the options to use other API key or the secret key
-openai.api_key = "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"
+openai.api_key = api_key_1
+openai.api_key = api_key_2
+
+
+
 
 
 @api_view(["GET"])
@@ -27,6 +37,10 @@ def api_root(request, format=None):
             "generate keywords": reverse(
                 "generate-keywords", request=request, format=format
             ),
+            "generate images": reverse(
+                "generate-image", request=request, format=format
+            )
+
         }
     )
 
@@ -44,6 +58,7 @@ def hello_world(request):
 
 @api_view(["POST"])
 def generate_keywords(request):
+ 
     # Retrieve the user_prompt from the request data
     user_prompt = request.data.get('user_prompt')
 
@@ -68,6 +83,24 @@ def generate_keywords(request):
         }
     )
 
+
+
+class ImageGenerationView(APIView):
+    def post(self, request):
+        prompt = request.data.get('prompt', '')
+
+        response = openai.Completion.create(
+            engine='davinci',
+            prompt=prompt,
+            max_tokens=50,
+            temperature=0.7,
+            top_p=1.0,
+            n=1,
+            stop=None,
+        )
+
+        image_url = [choice['text'].strip() for choice in response.choices]
+        return Response({'image_url': image_url})
 
 class ChatGPTListCreate(generics.ListCreateAPIView):
     """Class to define ChatGPTListCreate view"""

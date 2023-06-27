@@ -14,6 +14,7 @@ urlpatterns = [
     ),
     path("hello/", views.hello_world, name="hello-world"),
     path("generateKeywords/", views.generate_keywords, name="generate-keywords"),
+    path('generate-image/', views.ImageGenerationView.as_view(), name="generate-image"),
     path("", views.api_root),
 ]
 
