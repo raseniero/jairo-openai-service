@@ -87,19 +87,25 @@ def generate_keywords(request):
 
 class ImageGenerationView(APIView):
     def post(self, request):
-        prompt = request.data.get('prompt', '')
-        n = request.data.get('n', '')
 
-        response = openai.Image.create(
-            prompt=prompt,
-            n=n,
-            size="1024x1024"
-            )
-        #image_url = response['data'][0]['url']
-        image_url = [data['url'] for data in response['data']]
+        keywords = ['cat', 'beach', 'mountain', 'car', 'coffee']
+  
+        for keyword in keywords:
+            prompt = f"Generate an image of a {keyword}."
+            n = request.data.get('n', '')
+
+            response = openai.Completion.create(
+                prompt=prompt,
+                n=n,
+                size="512x512"
+                )
+
+        image_url = response['choices'][0]['images'][0]['url']
         return Response({'image_url': image_url})
+    
         #image_url = [choice['text'].strip() for choice in response.choices]
         #return Response({'image_url': image_url})
+
 
 class ChatGPTListCreate(generics.ListCreateAPIView):
     """Class to define ChatGPTListCreate view"""
