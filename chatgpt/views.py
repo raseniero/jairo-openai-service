@@ -97,7 +97,7 @@ class ImageGenerationView(APIView):
             response = openai.Image.create(
                 prompt=prompt,
                 n = n,
-                size="512x512"
+                size= "1024x1024"
             )
             
             image_url = [data['url'] for data in response['data']]
