@@ -10,6 +10,8 @@ import requests
 import openai
 from rest_framework.views import APIView
 
+from django.http import JsonResponse
+
 from jairo_openai_service import settings
 
 from .models import ChatGPT
@@ -87,24 +89,20 @@ def generate_keywords(request):
 
 class ImageGenerationView(APIView):
     def post(self, request):
-
-        keywords = ['cat', 'beach', 'mountain', 'car', 'coffee']
-  
-        for keyword in keywords:
-            prompt = f"Generate an image of a {keyword}."
+            
+            prompt = request.data.get('prompt', '')
             n = request.data.get('n', '')
+           
 
-            response = openai.Completion.create(
+            response = openai.Image.create(
                 prompt=prompt,
-                n=n,
+                n = n,
                 size="512x512"
-                )
-
-        image_url = response['choices'][0]['images'][0]['url']
-        return Response({'image_url': image_url})
-    
-        #image_url = [choice['text'].strip() for choice in response.choices]
-        #return Response({'image_url': image_url})
+            )
+            
+            image_url = [data['url'] for data in response['data']]
+            #image_url = [choice['text'].strip() for choice in response.choices]
+            return Response({'image_url': image_url})
 
 
 class ChatGPTListCreate(generics.ListCreateAPIView):
