@@ -90,14 +90,14 @@ class ImageGenerationView(APIView):
         prompt = request.data.get('prompt', '')
 
         response = openai.Image.create(
-            engine='davinci',
             prompt=prompt,
             n=1,
             size="1024x1024"
-        )
+            )
         image_url = response['data'][0]['url']
-        #image_url = [choice['text'].strip() for choice in response.choices]
         return Response({'image_url': image_url})
+        #image_url = [choice['text'].strip() for choice in response.choices]
+        #return Response({'image_url': image_url})
 
 class ChatGPTListCreate(generics.ListCreateAPIView):
     """Class to define ChatGPTListCreate view"""
