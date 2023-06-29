@@ -88,13 +88,15 @@ def generate_keywords(request):
 class ImageGenerationView(APIView):
     def post(self, request):
         prompt = request.data.get('prompt', '')
+        n = request.data.get('n', '')
 
         response = openai.Image.create(
             prompt=prompt,
-            n=1,
+            n=n,
             size="1024x1024"
             )
-        image_url = response['data'][0]['url']
+        #image_url = response['data'][0]['url']
+        image_url = [data['url'] for data in response['data']]
         return Response({'image_url': image_url})
         #image_url = [choice['text'].strip() for choice in response.choices]
         #return Response({'image_url': image_url})
