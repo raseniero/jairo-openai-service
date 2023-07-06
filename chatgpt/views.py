@@ -44,7 +44,7 @@ def api_root(request, format=None):
                 "generate-image", request=request, format=format
             ),
                         "scrape google images": reverse(
-                "scrape_google_images", request=request, format=format
+                "scrape-google-images", request=request, format=format
             )
 
         }

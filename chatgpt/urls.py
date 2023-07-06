@@ -15,7 +15,7 @@ urlpatterns = [
     path("hello/", views.hello_world, name="hello-world"),
     path("generateKeywords/", views.generate_keywords, name="generate-keywords"),
     path('generate-image/', views.ImageGenerationView.as_view(), name="generate-image"),
-    path('scrape-google-images/', views.scrape_google_images, name='scrape_google_images'),
+    path('scrape-google-images/', views.scrape_google_images, name='scrape-google-images'),
     path("", views.api_root),
 ]
 
