@@ -8,6 +8,7 @@ from rest_framework.reverse import reverse
 from rest_framework import generics
 import requests
 import openai
+from bs4 import BeautifulSoup
 from rest_framework.views import APIView
 
 from django.http import JsonResponse
@@ -41,6 +42,9 @@ def api_root(request, format=None):
             ),
             "generate images": reverse(
                 "generate-image", request=request, format=format
+            ),
+                        "scrape google images": reverse(
+                "scrape_google_images", request=request, format=format
             )
 
         }
@@ -114,3 +118,27 @@ class ChatGPTRetriveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = ChatGPT.objects.all()
     serializer_class = ChatGPTSerializer
+
+
+@api_view(['POST'])
+def scrape_google_images(request):
+    # Get the search query from the request parameters
+    query = request.data.get('query')
+    
+    # Prepare the URL for the Google Images search
+    search_url = f'https://www.google.com/search?q={query}&source=lnms&tbm=isch'
+    
+    # Send a GET request to the search URL
+    response = requests.get(search_url)
+    
+    # Parse the response HTML using BeautifulSoup
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # Find all the image elements on the page
+    images = soup.find_all('img')
+    
+    # Extract the image URLs
+    image_urls = [{'url': img['src']} for img in images]
+    
+    # Return the image URLs as a JSON response
+    return Response({'images': image_urls})
