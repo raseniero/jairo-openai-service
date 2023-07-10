@@ -11,12 +11,15 @@ import openai
 from bs4 import BeautifulSoup
 from rest_framework.views import APIView
 
+
 from django.http import JsonResponse
 
 from jairo_openai_service import settings
 
 from .models import ChatGPT
 from .serializers import ChatGPTSerializer
+
+
 
 api_key_1 = settings.API_KEYS[0]
 api_key_2 = settings.API_KEYS[1]
@@ -142,3 +145,7 @@ def scrape_google_images(request):
     
     # Return the image URLs as a JSON response
     return Response({'images': image_urls})
+
+
+
+
