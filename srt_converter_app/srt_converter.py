@@ -68,10 +68,10 @@ def convert_to_fcpxml(timecode_description):
     fcpxml_content = fcpxml_content.replace('{TITLE_NO}', spine_content)
 
     # Convert the modified FCPXML content to a base64-encoded string
-    fcpxml_bytes = fcpxml_content.encode('utf-8')
-    fcpxml_base64 = base64.b64encode(fcpxml_bytes).decode('utf-8')
+    #fcpxml_bytes = fcpxml_content.encode('utf-8')
+    #fcpxml_base64 = base64.b64encode(fcpxml_bytes).decode('utf-8')
 
-    return fcpxml_base64
+    return fcpxml_content
 
 
 def convert_timecode_to_offset(timecode):
