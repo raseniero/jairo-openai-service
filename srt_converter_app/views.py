@@ -7,7 +7,7 @@ def convert_text_to_fcpxml(request):
     text = request.data.get('text', '')
 
     try:
-        fcpxml_json = convert_to_fcpxml(text)
-        return Response({'fcpxml': fcpxml_json})
+        fcpxml = convert_to_fcpxml(text)
+        return Response(fcpxml)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
