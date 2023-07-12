@@ -17,13 +17,13 @@ def convert_to_fcpxml(timecode_description):
     timecodes = re.findall(r'(\d\d:\d\d:\d\d,\d\d\d) --> (\d\d:\d\d:\d\d,\d\d\d)', timecode_description)
     descriptions = re.findall(r'<b>(.*?)</b>', timecode_description)
 
+
     event_name = 'CC_XML'  # Replace with the desired event name
     project_name = 'FCPX_test/xml2srt'  # Replace with the desired project name
 
     fcpxml_content = template_content.replace('{EVENT_NAME}', event_name)
     fcpxml_content = fcpxml_content.replace('{PROJECT_NAME}', project_name)
 
-    # Define the title template
     title_template = '''
         <title name="{TITLE_NO}" offset="{OFFSET}" ref="r2" duration="{DURATION}" start="{START}">
             <param name="Position" key="9999/10199/10201/1/100/101" value="0 -418.279"/>
@@ -46,7 +46,7 @@ def convert_to_fcpxml(timecode_description):
     # Initialize the fcpxml_content with template_content
     fcpxml_content = template_content
 
-    spine_content = ''
+    spine = ''
     for i, (timecode, description, title_no) in enumerate(zip(timecodes, descriptions, title_nos), 1):
         start, end = timecode
 
@@ -63,9 +63,9 @@ def convert_to_fcpxml(timecode_description):
             DESCRIPTION=description
         )
 
-        spine_content += title_content
+        spine += title_content
 
-    fcpxml_content = fcpxml_content.replace('{TITLE_NO}', spine_content)
+    fcpxml_content = fcpxml_content.replace('{result}',spine)
 
     # Convert the modified FCPXML content to a base64-encoded string
     fcpxml_bytes = fcpxml_content.encode('utf-8')

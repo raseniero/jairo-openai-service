@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .srt_converter import convert_to_fcpxml
+from .srt_fcpxml_converter import convert_to_fcpxml
 
 @api_view(['POST'])
 def convert_text_to_fcpxml(request):
