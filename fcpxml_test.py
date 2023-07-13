@@ -1,7 +1,7 @@
 import os
 import base64
 import re
-from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 def convert_to_fcpxml(timecode_description, images_base_path):
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -24,6 +24,7 @@ def convert_to_fcpxml(timecode_description, images_base_path):
     fcpxml_content = template_content.replace('{EVENT_NAME}', event_name)
     fcpxml_content = fcpxml_content.replace('{PROJECT_NAME}', project_name)
 
+
     title_template = '''
         <title name="{TITLE_NO}" offset="{OFFSET}" ref="r2" duration="{DURATION}" start="{START}">
             <param name="Position" key="9999/10199/10201/1/100/101" value="0 -418.279"/>
@@ -37,7 +38,7 @@ def convert_to_fcpxml(timecode_description, images_base_path):
             <text>
                 <text-style ref="ts1">{DESCRIPTION}</text-style>
             </text>
-            <image ref="image{TITLE_NO}" offset="0s" duration="{DURATION}" start="{START}" src="" /> 
+             <image ref="image{TITLE_NO}" offset="0s" duration="{DURATION}" start="{START}" src="{IMAGE_PATH}" />            
             <text-style-def id="ts1">
                 <text-style font="Arial" fontSize="50" fontFace="Regular" fontColor="0.999996 1 1 1" shadowColor="0 0 0 0.75" shadowOffset="5 315" alignment="center"/>
             </text-style-def>
@@ -48,14 +49,15 @@ def convert_to_fcpxml(timecode_description, images_base_path):
     fcpxml_content = template_content
 
     spine = ''
-    for i, (timecode, description, title_no, image_name) in enumerate(zip(timecodes, descriptions, title_nos,image_names), 1):
+    for i, (timecode, description, title_no, image_name) in enumerate(zip(timecodes, descriptions, title_nos, image_names), 1):
         start, end = timecode
 
          # Convert timecode duration to offset format
         #start = convert_timecode_to_offset(start)  # Convert timecode to offset format
         offset = convert_timecode_to_offset(end)  # Convert timecode to offset format
         duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
-        image_path = os.path.join(images_base_path, image_name)  
+        
+        image_path = image_path = os.path.join(images_base_path, image_name)  
 
         title_content = title_template.format(
             TITLE_NO=title_no,
@@ -69,6 +71,7 @@ def convert_to_fcpxml(timecode_description, images_base_path):
         spine += title_content
 
     fcpxml_content = fcpxml_content.replace('{result}',spine)
+
 
     # Convert the modified FCPXML content to a base64-encoded string
     fcpxml_bytes = fcpxml_content.encode('utf-8')
