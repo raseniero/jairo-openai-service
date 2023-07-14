@@ -27,13 +27,13 @@ def convert_to_fcpxml(timecode_description):
 
 
     asset_template = '''
-            <asset start="0/1s" name="{IMAGE}" id="{TITLE_NO}" duration="{DURATION}" hasVideo="1" format="r3">
-                <media-rep kind="original-media" src="{IMAGE}"/>
+            <asset start="{START}" name="{IMAGE}" id="{TITLE_NO}" duration="{DURATION}" hasVideo="1" format="r3">
+                <media-rep kind="original-media" src="C:/Users/Nico/OneDrive/Desktop/{IMAGE}"/>
             </asset>
     '''
 
     spine_template = '''
-            <video offset="{OFFSET}" start="0/1s" name="{IMAGE}" ref="{TITLE_NO}" duration="{DURATION}" enabled="1">
+            <video offset="{OFFSET}" start="{START}" name="{IMAGE}" ref="{TITLE_NO}" duration="{DURATION}" enabled="1">
                     <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
             </video> 
     '''
