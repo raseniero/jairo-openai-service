@@ -28,7 +28,7 @@ def convert_to_fcpxml(timecode_description):
 
     asset_template = '''
             <asset start="{START}" name="{IMAGE}" id="{TITLE_NO}" duration="{DURATION}" hasVideo="1" format="r3">
-                <media-rep kind="original-media" src="C:/Users/User/Downloads/test/{IMAGE}"/>
+                <media-rep kind="original-media" src="C:/Users/User/Downloads/{IMAGE}"/>
             </asset>
     '''
 
