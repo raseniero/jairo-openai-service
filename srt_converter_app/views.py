@@ -1,12 +1,11 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .srt_fcpxml_converter import convert_to_fcpxml
-import os
 
 @api_view(['POST'])
 def convert_text_to_fcpxml(request):
     text = request.data.get('text', '')
-    images_directory = os.getcwd() # Get the current working directory
+    images_directory = request.data.get('images_directory', '')
     
 
     try:
