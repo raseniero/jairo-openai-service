@@ -4,7 +4,7 @@ import re
 import uuid
 #from django.core.files.uploadedfile import SimpleUploadedFile
 
-def convert_to_fcpxml(timecode_description):
+def convert_to_fcpxml(timecode_description, images_directory):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     template_path = os.path.join(current_dir, 'Template.xml')    
     
@@ -15,7 +15,7 @@ def convert_to_fcpxml(timecode_description):
     # Replace placeholders in the template with the provided timecode and description
     title_nos = re.findall(r'^(\d+)$', timecode_description, re.MULTILINE)
     timecodes = re.findall(r'(\d\d:\d\d:\d\d,\d\d\d) --> (\d\d:\d\d:\d\d,\d\d\d)', timecode_description)
-    images = re.findall(r'<b>(.*?)</b>', timecode_description)
+    #images = re.findall(r'<b>(.*?)</b>', timecode_description)
    
 
 
@@ -28,7 +28,7 @@ def convert_to_fcpxml(timecode_description):
 
     asset_template = '''
             <asset start="{START}" name="{IMAGE}" id="{TITLE_NO}" duration="{DURATION}" hasVideo="1" format="r3">
-                <media-rep kind="original-media" src="C:/Users/User/Downloads/{IMAGE}"/>
+                <media-rep kind="original-media" src="{IMAGE_SRC}"/>
             </asset>
     '''
 
@@ -42,7 +42,7 @@ def convert_to_fcpxml(timecode_description):
 
     spine = ''
     asset = ''
-    for i, (timecode, image, title_no) in enumerate(zip(timecodes, images, title_nos), 1):
+    for i, (timecode, title_no) in enumerate(zip(timecodes, title_nos), 1):
         start, end = timecode
 
          # Convert timecode duration to offset format
@@ -50,13 +50,16 @@ def convert_to_fcpxml(timecode_description):
         offset = convert_timecode_to_offset(end)  # Convert timecode to offset format
         duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
+        
+        image_name = f'image_{i}.png'  # Replace with the desired image name
+        image_path = os.path.join(images_directory, image_name)  # Construct the image path based on the images directory
 
         spine_content = spine_template.format(
             TITLE_NO=title_no,
             OFFSET=offset,
             DURATION=duration,
             START=start,
-            IMAGE=image,
+            IMAGE=image_name,
            
         )
 
@@ -66,7 +69,8 @@ def convert_to_fcpxml(timecode_description):
             DURATION=duration,
             ASSET_ID=asset_id,
             START=start,
-            IMAGE=image,
+            IMAGE=image_name,
+            IMAGE_SRC=image_path
            
         )
 
