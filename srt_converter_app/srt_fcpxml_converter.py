@@ -15,7 +15,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
     # Replace placeholders in the template with the provided timecode and description
     title_nos = re.findall(r'^(\d+)$', timecode_description, re.MULTILINE)
     timecodes = re.findall(r'(\d\d:\d\d:\d\d,\d\d\d) --> (\d\d:\d\d:\d\d,\d\d\d)', timecode_description)
-    #images = re.findall(r'<b>(.*?)</b>', timecode_description)
+    images = re.findall(r'<b>(.*?)</b>', timecode_description)
    
 
 
@@ -42,7 +42,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
 
     spine = ''
     asset = ''
-    for i, (timecode, title_no) in enumerate(zip(timecodes, title_nos), 1):
+    for i, (timecode, title_no, image) in enumerate(zip(timecodes, title_nos, images), 1):
         start, end = timecode
 
          # Convert timecode duration to offset format
@@ -51,7 +51,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
         duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
-        image_name = f'image_{i}.png'  # Replace with the desired image name
+        image_name = f'{image}'  # Replace with the desired image name
         image_path = os.path.join(images_directory, image_name)  # Construct the image path based on the images directory
 
         spine_content = spine_template.format(
