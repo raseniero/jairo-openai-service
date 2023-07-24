@@ -2,6 +2,7 @@ import os
 import base64
 import re
 import uuid
+from datetime import datetime
 #from django.core.files.uploadedfile import SimpleUploadedFile
 
 def convert_to_fcpxml(timecode_description, images_directory):
@@ -46,9 +47,9 @@ def convert_to_fcpxml(timecode_description, images_directory):
         start, end = timecode
 
          # Convert timecode duration to offset format
-        #start = convert_timecode_to_offset(start)  # Convert timecode to offset format
-        offset = convert_timecode_to_offset(end)  # Convert timecode to offset format
-        duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
+        start = timecode_to_start_offset(start)  # Convert timecode to offset format
+        offset = timecode_to_offset(end)  # Convert timecode to offset format
+        duration = timecode_to_fractional_seconds_format(start, end)  # Convert timecode duration to offset format
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
         image_name = f'{image}'  # Replace with the desired image name
@@ -104,5 +105,74 @@ def convert_timecode_to_frames(timecode):
     total_frames = (hours * 60 * 60 * 30) + (minutes * 60 * 30) + (seconds * 30) + frames
     return total_frames
 
+def timecode_to_offset(timecode):
+    start_time, end_time = timecode.split(" --> ")
+    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
+    end_time = datetime.strptime(end_time, "%H:%M:%S,%f")
+
+    # Calculate the offset in milliseconds
+    offset_ms = (end_time - start_time).total_seconds() * 1000
+
+    # Convert offset to fractional seconds format
+    numerator = int(offset_ms)
+    denominator = 1000
+
+    # Simplify the fraction if possible
+    def gcd(a, b):
+        while b:
+            a, b = b, a % b
+        return a
+
+    divisor = gcd(numerator, denominator)
+    numerator //= divisor
+    denominator //= divisor
+
+    return f"{numerator}/{denominator}s"
+
+def timecode_to_fractional_seconds_format(timecode):
+    start_time, end_time = timecode.split(" --> ")
+    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
+    end_time = datetime.strptime(end_time, "%H:%M:%S,%f")
+
+    # Calculate the duration in microseconds
+    duration_microseconds = (end_time - start_time).microseconds
+
+    # Convert duration to fractional seconds format
+    numerator = duration_microseconds
+    denominator = 1000000
+
+    # Simplify the fraction if possible
+    def gcd(a, b):
+        while b:
+            a, b = b, a % b
+        return a
+
+    divisor = gcd(numerator, denominator)
+    numerator //= divisor
+    denominator //= divisor
+
+    return f"{numerator}/{denominator}s"
 
 
+def timecode_to_start_offset(timecode):
+    start_time, _ = timecode.split(" --> ")
+    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
+
+    # Convert start time to fractional seconds format
+    offset_ms = start_time.microsecond / 1000
+
+    # Convert offset to fractional seconds format
+    numerator = int(offset_ms)
+    denominator = 1000
+
+    # Simplify the fraction if possible
+    def gcd(a, b):
+        while b:
+            a, b = b, a % b
+        return a
+
+    divisor = gcd(numerator, denominator)
+    numerator //= divisor
+    denominator //= divisor
+
+    return f"{numerator}/{denominator}s"
