@@ -48,7 +48,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
 
          # Convert timecode duration to offset format
         #start = convert_timecode_to_offset(start)  # Convert timecode to offset format
-        offset = timecode_to_offset(end)  # Convert timecode to offset format
+        offset = convert_timecode_to_offset(end)  # Convert timecode to offset format
         duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
