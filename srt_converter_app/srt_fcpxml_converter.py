@@ -67,7 +67,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
             TITLE_NO=title_no,
             OFFSET=offset,
             DURATION=duration,
-            START=start,
+            START=start_time,
             IMAGE=image_name,
            
         )
@@ -77,7 +77,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
             OFFSET=offset,
             DURATION=duration,
             ASSET_ID=asset_id,
-            START=start,
+            START=start_time,
             IMAGE=image_name,
             IMAGE_SRC=image_path
            
