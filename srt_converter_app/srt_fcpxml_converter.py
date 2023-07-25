@@ -15,7 +15,8 @@ def convert_to_fcpxml(timecode_description, images_directory):
         
     # Replace placeholders in the template with the provided timecode and description
     title_nos = re.findall(r'^(\d+)$', timecode_description, re.MULTILINE)
-    timecodes = re.findall(r'(\d\d:\d\d:\d\d,\d\d\d) --> (\d\d:\d\d:\d\d,\d\d\d)', timecode_description)
+    # Replace placeholders in the template with the provided timecode and description
+    timecode_texts = re.split(r'(\d+:\d+:\d+,\d+ --> \d+:\d+:\d+,\d+)\n', timecode_description)
     images = re.findall(r'<b>(.*?)</b>', timecode_description)
    
 
@@ -43,15 +44,22 @@ def convert_to_fcpxml(timecode_description, images_directory):
 
     spine = ''
     asset = ''
-    for i, (timecode, title_no, image) in enumerate(zip(timecodes, title_nos, images), 1):
-        start, end = timecode
+    timecodes = timecode_texts[1::2]
+    texts = timecode_texts[2::2]
+    for i, (timecode, text, title_no, image) in enumerate(zip(timecodes, texts, title_nos, images), 1):
+        
 
          # Convert timecode duration to offset format
-        #start = convert_timecode_to_offset(start)  # Convert timecode to offset format
-        offset = convert_timecode_to_offset(end)  # Convert timecode to offset format
-        duration = convert_timecode_to_offset_duration(start, end)  # Convert timecode duration to offset format
+        start_time, end_time = extract_start_end_time(timecode)
+        frame_rate = 24
+        start, offset, duration = convert_to_offset_and_duration(start_time, end_time, frame_rate)   
+        
+
+        
+         
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
+        text = text.strip()
         image_name = f'{image}'  # Replace with the desired image name
         image_path = os.path.join(images_directory, image_name)  # Construct the image path based on the images directory
 
@@ -88,91 +96,46 @@ def convert_to_fcpxml(timecode_description, images_directory):
 
     return fcpxml_base64
 
+def convert_to_offset_and_duration(start_time, end_time, frame_rate):
+    # Parse the start time and end time to get hours, minutes, seconds, and frames
+    start_hours, start_minutes, start_seconds_frames = start_time.split(":")
+    start_seconds, start_frames = start_seconds_frames.split(",")
+    end_hours, end_minutes, end_seconds_frames = end_time.split(":")
+    end_seconds, end_frames = end_seconds_frames.split(",")
 
-def convert_timecode_to_offset(timecode):
-    hours, minutes, seconds, frames = map(int, re.split(r'[:,]', timecode))
-    offset_frames = (hours * 60 * 60 * 30) + (minutes * 60 * 30) + (seconds * 30) + frames
-    return f'{offset_frames}/30000s'
+    # Calculate the total frames for start time and end time
+    start_frames = int(start_frames)
+    end_frames = int(end_frames)
+    total_start_frames = int(start_hours) * 3600 * frame_rate + int(start_minutes) * 60 * frame_rate + int(start_seconds) * frame_rate + start_frames
+    total_end_frames = int(end_hours) * 3600 * frame_rate + int(end_minutes) * 60 * frame_rate + int(end_seconds) * frame_rate + end_frames
 
-def convert_timecode_to_offset_duration(start, end):
-    start_frames = convert_timecode_to_frames(start)
-    end_frames = convert_timecode_to_frames(end)
-    duration_frames = end_frames - start_frames
-    return f'{duration_frames}/30000s'
+    # Calculate the offset as the total frames of the start time
+    offset_frames = total_start_frames
 
-def convert_timecode_to_frames(timecode):
-    hours, minutes, seconds, frames = map(int, re.split(r'[:,]', timecode))
-    total_frames = (hours * 60 * 60 * 30) + (minutes * 60 * 30) + (seconds * 30) + frames
-    return total_frames
+    # Calculate the duration in frames by subtracting total frames of the start time from total frames of the end time
+    duration_frames = total_end_frames - total_start_frames
 
-def timecode_to_offset(timecode):
-    start_time, end_time = timecode.split(" --> ")
-    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
-    end_time = datetime.strptime(end_time, "%H:%M:%S,%f")
+    # Format the start time, offset, and duration into the fractional frame rate format
+    start_fractional_frame_rate = f'{offset_frames}/{frame_rate}s'
+    offset = f'{offset_frames}/{frame_rate}s'
+    duration = f'{duration_frames}/{frame_rate}s'
 
-    # Calculate the offset in milliseconds
-    offset_ms = (end_time - start_time).total_seconds() * 1000
+    return start_fractional_frame_rate, offset, duration
 
-    # Convert offset to fractional seconds format
-    numerator = int(offset_ms)
-    denominator = 1000
+def extract_start_end_time(time_code):
+    start_time_str, end_time_str = time_code.split(" --> ")
 
-    # Simplify the fraction if possible
-    def gcd(a, b):
-        while b:
-            a, b = b, a % b
-        return a
+    # Extract start time components (hours, minutes, seconds, and frames)
+    start_hours, start_minutes, start_seconds_frames = start_time_str.split(":")
+    start_seconds, start_frames = start_seconds_frames.split(",")
+    start_time = f'{int(start_hours):02d}:{int(start_minutes):02d}:{int(start_seconds):02d},{start_frames}'
 
-    divisor = gcd(numerator, denominator)
-    numerator //= divisor
-    denominator //= divisor
+    # Extract end time components (hours, minutes, seconds, and frames)
+    end_hours, end_minutes, end_seconds_frames = end_time_str.split(":")
+    end_seconds, end_frames = end_seconds_frames.split(",")
+    end_time = f'{int(end_hours):02d}:{int(end_minutes):02d}:{int(end_seconds):02d},{end_frames}'
 
-    return f"{numerator}/{denominator}s"
-
-def timecode_to_fractional_seconds_format(timecode):
-    start_time, end_time = timecode.split(" --> ")
-    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
-    end_time = datetime.strptime(end_time, "%H:%M:%S,%f")
-
-    # Calculate the duration in microseconds
-    duration_microseconds = (end_time - start_time).microseconds
-
-    # Convert duration to fractional seconds format
-    numerator = duration_microseconds
-    denominator = 1000000
-
-    # Simplify the fraction if possible
-    def gcd(a, b):
-        while b:
-            a, b = b, a % b
-        return a
-
-    divisor = gcd(numerator, denominator)
-    numerator //= divisor
-    denominator //= divisor
-
-    return f"{numerator}/{denominator}s"
+    return start_time, end_time
 
 
-def timecode_to_start_offset(timecode):
-    start_time, _ = timecode.split(" --> ")
-    start_time = datetime.strptime(start_time, "%H:%M:%S,%f")
 
-    # Convert start time to fractional seconds format
-    offset_ms = start_time.microsecond / 1000
-
-    # Convert offset to fractional seconds format
-    numerator = int(offset_ms)
-    denominator = 1000
-
-    # Simplify the fraction if possible
-    def gcd(a, b):
-        while b:
-            a, b = b, a % b
-        return a
-
-    divisor = gcd(numerator, denominator)
-    numerator //= divisor
-    denominator //= divisor
-
-    return f"{numerator}/{denominator}s"
