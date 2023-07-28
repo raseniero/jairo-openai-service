@@ -1,53 +1,87 @@
-def convert_to_offset_and_duration(start_time, end_time, frame_rate):
-    # Parse the start time and end time to get hours, minutes, seconds, and frames
-    start_hours, start_minutes, start_seconds_frames = start_time.split(":")
-    start_seconds, start_frames = start_seconds_frames.split(",")
-    end_hours, end_minutes, end_seconds_frames = end_time.split(":")
-    end_seconds, end_frames = end_seconds_frames.split(",")
+def offset_duration_to_timecode(offset, start, duration, frame_rate=24):
+    # Convert offset to milliseconds
+    offset_ms, _ = map(int, offset[:-2].split('/'))
 
-    # Calculate the total frames for start time and end time
-    start_frames = int(start_frames)
-    end_frames = int(end_frames)
-    total_start_frames = int(start_hours) * 3600 * frame_rate + int(start_minutes) * 60 * frame_rate + int(start_seconds) * frame_rate + start_frames
-    total_end_frames = int(end_hours) * 3600 * frame_rate + int(end_minutes) * 60 * frame_rate + int(end_seconds) * frame_rate + end_frames
+    # Convert start to frames
+    start_frames, start_denominator = map(int, start[:-1].split('/'))
 
-    # Calculate the offset as the total frames of the start time
-    offset_frames = total_start_frames
+    # Convert duration to frames
+    duration_frames, duration_denominator = map(int, duration[:-1].split('/'))
 
-    # Calculate the duration in frames by subtracting total frames of the start time from total frames of the end time
-    duration_frames = total_end_frames - total_start_frames
+    # Calculate the total milliseconds for the start timecode
+    total_start_ms = offset_ms + (start_frames * 1000 / (frame_rate / start_denominator))
 
-    # Format the start time, offset, and duration into the fractional frame rate format
-    start_fractional_frame_rate = f'{offset_frames}/{frame_rate}s'
-    offset = f'{offset_frames}/{frame_rate}s'
-    duration = f'{duration_frames}/{frame_rate}s'
+    # Calculate the total milliseconds for the end timecode
+    total_end_ms = total_start_ms + (duration_frames * 1000 / (frame_rate / duration_denominator))
 
-    return start_fractional_frame_rate, offset, duration
+    # Calculate hours, minutes, seconds, and milliseconds for start and end timecodes
+    h_start, total_start_ms = divmod(total_start_ms, 3600000)
+    m_start, total_start_ms = divmod(total_start_ms, 60000)
+    s_start, ms_start = divmod(total_start_ms, 1000)
 
-def extract_start_end_time(time_code):
-    start_time_str, end_time_str = time_code.split(" --> ")
+    h_end, total_end_ms = divmod(total_end_ms, 3600000)
+    m_end, total_end_ms = divmod(total_end_ms, 60000)
+    s_end, ms_end = divmod(total_end_ms, 1000)
 
-    # Extract start time components (hours, minutes, seconds, and frames)
-    start_hours, start_minutes, start_seconds_frames = start_time_str.split(":")
-    start_seconds, start_frames = start_seconds_frames.split(",")
-    start_time = f'{int(start_hours):02d}:{int(start_minutes):02d}:{int(start_seconds):02d},{start_frames}'
+    # Format the timecode strings
+    start_timecode = "{:02d}:{:02d}:{:02d},{:03d}".format(int(h_start), int(m_start), int(s_start), int(ms_start))
+    end_timecode = "{:02d}:{:02d}:{:02d},{:03d}".format(int(h_end), int(m_end), int(s_end), int(ms_end))
 
-    # Extract end time components (hours, minutes, seconds, and frames)
-    end_hours, end_minutes, end_seconds_frames = end_time_str.split(":")
-    end_seconds, end_frames = end_seconds_frames.split(",")
-    end_time = f'{int(end_hours):02d}:{int(end_minutes):02d}:{int(end_seconds):02d},{end_frames}'
+    return f"{start_timecode} --> {end_timecode}"
 
-    return start_time, end_time
 
-# Example usage
-time_code = "00:00:23,466 --> 00:00:24,866"
+# Example usage with the provided offset, start, and duration values
+offset = "54001/15s"
+start = "0/1s"
+duration = "61/30s"
+frame_rate = 30
 
-start_time, end_time = extract_start_end_time(time_code)
-print("Start Time:", start_time)
-print("End Time:", end_time)
+# Convert back to timecode range
+timecode_range = offset_duration_to_timecode(offset, start, duration, frame_rate)
+print(timecode_range)
 
-frame_rate = 24
-start_fractional_frame_rate, offset, duration = convert_to_offset_and_duration(start_time, end_time, frame_rate)
-print("Start Time in fractional frame rate format:", start_fractional_frame_rate)
-print("Offset in fractional frame rate format:", offset)
-print("Duration in fractional frame rate format:", duration)
+def timecode_to_offset_start_duration(timecode_range, frame_rate=24):
+    def timecode_to_ms(timecode):
+        h, m, s_ms = timecode.split(':')
+        s, ms = s_ms.split(',')
+        total_ms = int(h) * 3600000 + int(m) * 60000 + int(s) * 1000 + int(ms)
+        return total_ms
+
+    # Split the timecode range into start and end timecodes
+    start_timecode, end_timecode = timecode_range.split(" --> ")
+
+    # Convert the timecodes to milliseconds
+    total_start_ms = timecode_to_ms(start_timecode)
+    total_end_ms = timecode_to_ms(end_timecode)
+
+    # Calculate the offset in milliseconds
+    offset_ms = total_start_ms
+
+    # Calculate the start and duration in frames
+    start_frames = (total_start_ms / 1000) * frame_rate
+    duration_frames = ((total_end_ms - total_start_ms) / 1000) * frame_rate
+
+    # Convert the start and duration frames to fractions
+    start_numerator = int(start_frames)
+    start_denominator = frame_rate
+    duration_numerator = int(duration_frames)
+    duration_denominator = frame_rate
+
+    # Format the offset, start, and duration strings
+    offset = f"{offset_ms}/{1000}ms"
+    start = f"{start_numerator}/{start_denominator}s"
+    duration = f"{duration_numerator}/{duration_denominator}s"
+
+    return offset, start, duration
+
+
+# Example usage to convert the timecode back to offset, start, and duration
+timecode_range = "01:00:00,033 --> 01:00:03,400"
+frame_rate = 30
+
+# Convert timecode range to offset, start, and duration
+offset, start, duration = timecode_to_offset_start_duration(timecode_range, frame_rate)
+
+print("Offset:", offset)
+print("Start:", start)
+print("Duration:", duration)

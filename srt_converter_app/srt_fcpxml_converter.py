@@ -29,13 +29,13 @@ def convert_to_fcpxml(timecode_description, images_directory):
 
 
     asset_template = '''
-            <asset start="{START}" name="{IMAGE}" id="{POSITION_NO}" duration="{DURATION}" hasVideo="1" format="r3">
+            <asset start="0/1s" name="{IMAGE}" id="{POSITION_NO}" duration="0/1s" hasVideo="1" format="r3">
                 <media-rep kind="original-media" src="{IMAGE_SRC}"/>
             </asset>
     '''
 
     spine_template = '''
-            <video offset="{OFFSET}" start="{START}" name="{IMAGE}" ref="{POSITION_NO}" duration="{DURATION}" enabled="1">
+            <video offset="{OFFSET}" start="0/1s" name="{IMAGE}" ref="{POSITION_NO}" duration="{DURATION}" enabled="1">
                     <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
             </video> 
     '''
@@ -53,10 +53,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
         start_time, end_time = extract_start_end_time(timecode)
         frame_rate = 24
         start_fractional_frame_rate, offset, duration = convert_to_offset_and_duration(start_time, end_time, frame_rate)   
-        start_time_position = calculate_start_time(position_no, frame_rate)
-        
-
-        
+       
          
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
@@ -68,7 +65,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
             POSITION_NO=position_no,
             OFFSET=offset,
             DURATION=duration,
-            START=start_time_position,
+            START=start_fractional_frame_rate,
             IMAGE=image_name,
            
         )
@@ -79,7 +76,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
             OFFSET=offset,
             DURATION=duration,
             ASSET_ID=asset_id,
-            START=start_time_position,
+            START=start_fractional_frame_rate,
             IMAGE=image_name,
             IMAGE_SRC=image_path
            
@@ -140,7 +137,6 @@ def extract_start_end_time(time_code):
     return start_time, end_time
 
 
-def calculate_start_time(position, frame_rate):
-    return f'{position}/{frame_rate}s'
+
 
 
