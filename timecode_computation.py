@@ -10,8 +10,8 @@ def timecode_to_framerate(timecode_str, framerate):
     duration_s, duration_ms = duration_s_ms.split(",")
 
     # Convert offset and duration to seconds
-    offset_seconds = int(offset_h) * 3600 + int(offset_m) * 60 + int(offset_s) + int(offset_ms) / 1000.0
-    duration_seconds = int(duration_h) * 3600 + int(duration_m) * 60 + int(duration_s) + int(duration_ms) / 1000.0
+    offset_seconds = int(offset_h) * 3600 + int(offset_m)  + int(offset_s) + int(offset_ms) / 1000.0
+    duration_seconds = int(duration_h) * 3600 + int(duration_m)  + int(duration_s) + int(duration_ms) / 1000.0
 
     # Calculate fractional offset and duration
     offset_fraction = Fraction(round(offset_seconds * framerate), framerate)
@@ -20,9 +20,10 @@ def timecode_to_framerate(timecode_str, framerate):
     return offset_fraction, duration_fraction
 
 # Example usage with 30 frames per second (fps) frame rate
-timecode_str = "01:00:00,033 --> 01:00:03,400"
+timecode_str = "01:00:03,400 --> 01:00:04,733"
 framerate = 24
 
 offset, duration = timecode_to_framerate(timecode_str, framerate)
 print("Offset:", f"{offset.numerator}/{offset.denominator}s")
 print("Duration:", f"{duration.numerator}/{duration.denominator}s")
+

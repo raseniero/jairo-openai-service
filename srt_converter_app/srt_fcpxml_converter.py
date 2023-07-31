@@ -92,7 +92,7 @@ def timecode_to_fcpxml(timecode, framerate):
     def timecode_to_fraction(timecode_str, framerate):
         h, m, s_ms = timecode_str.split(":")
         s, ms = s_ms.split(",")
-        total_seconds = int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
+        total_seconds = int(h) * 3600 + int(m)  + int(s) + int(ms) / 1000.0
         return Fraction(round(total_seconds * framerate), framerate)
 
     offset_str, duration_str = timecode.split(" --> ")
