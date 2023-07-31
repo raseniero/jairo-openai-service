@@ -41,12 +41,10 @@ def convert_to_fcpxml(timecode_description, images_directory):
     timecodes = timecode_texts[1::2]
     texts = timecode_texts[2::2]
     for i, (timecode, text, position_no, image) in enumerate(zip(timecodes, texts, position_nos, images), 1):
-        # Convert timecode duration to offset format
+
         frame_rate = 24  # Replace with the desired frame rate
-        #offset, duration = timecode_to_framerate(timecode, frame_rate)
-        #offsets = f"{offset.numerator}/{offset.denominator}s"
-        #durations = f"{duration.numerator}/{duration.denominator}s"
-        offset, duration = timecode_to_fcpxml(timecode, frame_rate)
+ 
+        duration, offset  = timecode_to_framerate(timecode, frame_rate)
         offsets = offset
         durations = duration
         starts = offset
@@ -88,18 +86,31 @@ def convert_to_fcpxml(timecode_description, images_directory):
     return fcpxml_base64
 
 
-def timecode_to_fcpxml(timecode, framerate):
-    def timecode_to_fraction(timecode_str, framerate):
-        h, m, s_ms = timecode_str.split(":")
-        s, ms = s_ms.split(",")
-        total_seconds = int(h) * 3600 + int(m)  + int(s) + int(ms) / 1000.0
-        return Fraction(round(total_seconds * framerate), framerate)
+def timecode_to_framerate(timecode_str, framerate):
+    # Parse the timecode string into offset and duration
+    offset_str, duration_str = timecode_str.strip().split(" --> ")
+    offset_h, offset_m, offset_s_ms = offset_str.split(":")
+    duration_h, duration_m, duration_s_ms = duration_str.split(":")
+    offset_s, offset_ms = offset_s_ms.split(",")
+    duration_s, duration_ms = duration_s_ms.split(",")
 
-    offset_str, duration_str = timecode.split(" --> ")
-    offset_fraction = timecode_to_fraction(offset_str.strip(), framerate)
-    duration_fraction = timecode_to_fraction(duration_str.strip(), framerate)
+    # Convert offset and duration to seconds
+    offset_seconds = int(offset_h) * 3600 + int(offset_m) * 60  + int(offset_s) + int(offset_ms) / 1000.00
+    duration_seconds = int(duration_h) * 3600 + int(duration_m) * 60 + int(duration_s) + int(duration_ms) / 1000.0
+    print(offset_seconds)
+    print(duration_seconds)
+    
+    # Calculate fractional offset and duration
+    offset_fraction = offset_seconds * framerate
+    offset_round = round(offset_fraction)
+    offset = f"{offset_round}/24"
+    print(offset)
+    
+    
+    duration_fraction = duration_seconds - offset_seconds 
+    duration_x24 = duration_fraction * 24
+    durations_round = round(duration_x24)
+    duration = f"{durations_round}/24"
+    print(duration)
 
-    offset = f"{offset_fraction.numerator}/{offset_fraction.denominator}s"
-    duration = f"{duration_fraction.numerator}/{duration_fraction.denominator}s"
-
-    return offset, duration
+    return duration, offset
