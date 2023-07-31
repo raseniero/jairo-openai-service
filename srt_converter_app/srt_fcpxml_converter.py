@@ -42,10 +42,15 @@ def convert_to_fcpxml(timecode_description, images_directory):
     texts = timecode_texts[2::2]
     for i, (timecode, text, position_no, image) in enumerate(zip(timecodes, texts, position_nos, images), 1):
         # Convert timecode duration to offset format
-        frame_rate = 24  # Replace with the desired frame rate
-        offset, duration = timecode_to_framerate(timecode, frame_rate)
+        frame_rate = 30  # Replace with the desired frame rate
+        #offset, duration = timecode_to_framerate(timecode, frame_rate)
+        #offsets = f"{offset.numerator}/{offset.denominator}s"
+        #durations = f"{duration.numerator}/{duration.denominator}s"
+        offset, duration = timecode_to_fcpxml(timecode, frame_rate)
         offsets = f"{offset.numerator}/{offset.denominator}s"
         durations = f"{duration.numerator}/{duration.denominator}s"
+        
+        
         
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
         
@@ -97,5 +102,25 @@ def timecode_to_framerate(timecode_str, framerate):
     # Calculate fractional offset and duration
     offset_fraction = Fraction(round(offset_seconds * framerate), framerate)
     duration_fraction = Fraction(round(duration_seconds * framerate), framerate)
+
+    return offset_fraction, duration_fraction
+
+
+def timecode_to_fcpxml(timecode_str, framerate):
+    offset_str, duration_str = timecode_str.split(" --> ")
+    offset, duration = offset_str.strip(), duration_str.strip()
+
+    # Function to convert timecode string to fractional frame format
+    def to_fractional_frame(timecode):
+        h, m, s_ms = timecode.split(":")
+        s, ms = s_ms.split(",")
+        total_seconds = int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
+        return Fraction(round(total_seconds * framerate), framerate)
+
+    offset_fraction = to_fractional_frame(offset)
+    duration_fraction = to_fractional_frame(duration)
+
+    offset_str = f"{offset_fraction.numerator}/{offset_fraction.denominator}s"
+    duration_str = f"{duration_fraction.numerator}/{duration_fraction.denominator}s"
 
     return offset_fraction, duration_fraction
