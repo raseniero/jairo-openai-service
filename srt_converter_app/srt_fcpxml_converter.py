@@ -103,14 +103,14 @@ def timecode_to_framerate(timecode_str, framerate):
     # Calculate fractional offset and duration
     offset_fraction = offset_seconds * framerate
     offset_round = round(offset_fraction)
-    offset = f"{offset_round}/24"
+    offset = f"{offset_round}/24s"
     print(offset)
     
     
     duration_fraction = duration_seconds - offset_seconds 
     duration_x24 = duration_fraction * 24
     durations_round = round(duration_x24)
-    duration = f"{durations_round}/24"
+    duration = f"{durations_round}/24s"
     print(duration)
 
     return duration, offset
