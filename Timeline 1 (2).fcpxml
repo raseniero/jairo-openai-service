@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.9">
+    <resources>
+        <format id="r0" height="1080" name="FFVideoFormat1080p30" width="1920" frameDuration="1/30s"/>
+        <format id="r1" height="816" name="FFVideoFormatRateUndefined" width="1456"/>
+        <format id="r3" height="1024" name="FFVideoFormatRateUndefined" width="1024"/>
+        <asset id="r2" start="0/1s" hasVideo="1" name="whatlurksbeneath_45_year_old_handsome_man_2000s_9f00b25f-09ca-4ab2-80c7-dc6610e9157f.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_45_year_old_handsome_man_2000s_9f00b25f-09ca-4ab2-80c7-dc6610e9157f.png" kind="original-media"/>
+        </asset>
+        <asset id="r4" start="0/1s" hasVideo="1" name="whatlurksbeneath_bigfoot_photograph_polaroid_1990s_5addc393-611c-470d-8fb7-e5e66b095577.png" duration="0/1s" format="r3">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_bigfoot_photograph_polaroid_1990s_5addc393-611c-470d-8fb7-e5e66b095577.png" kind="original-media"/>
+        </asset>
+        <asset id="r5" start="0/1s" hasVideo="1" name="whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_6b2254f8-f3c5-4367-8064-5b6eb35d4054.png" duration="0/1s" format="r3">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_6b2254f8-f3c5-4367-8064-5b6eb35d4054.png" kind="original-media"/>
+        </asset>
+        <asset id="r6" start="0/1s" hasVideo="1" name="whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_8f0e560c-bbb1-4382-8327-aa548503dcc1.png" duration="0/1s" format="r3">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_8f0e560c-bbb1-4382-8327-aa548503dcc1.png" kind="original-media"/>
+        </asset>
+        <asset id="r7" start="0/1s" hasVideo="1" name="whatlurksbeneath_deep_woods_cabin_wisconsin_polaroid_f82558a3-4534-403e-a6f9-cd68931167de.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_deep_woods_cabin_wisconsin_polaroid_f82558a3-4534-403e-a6f9-cd68931167de.png" kind="original-media"/>
+        </asset>
+        <asset id="r8" start="0/1s" hasVideo="1" name="whatlurksbeneath_fifteen_years_old_1991_photograph_deep_woods_7a817afc-b8e8-44d3-bca8-878877c7c77c.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_fifteen_years_old_1991_photograph_deep_woods_7a817afc-b8e8-44d3-bca8-878877c7c77c.png" kind="original-media"/>
+        </asset>
+        <asset id="r9" start="0/1s" hasVideo="1" name="whatlurksbeneath_hiker_in_1984_polaroid_02de07dd-75e7-4a33-aa18-3ec701c0829a.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_hiker_in_1984_polaroid_02de07dd-75e7-4a33-aa18-3ec701c0829a.png" kind="original-media"/>
+        </asset>
+        <asset id="r10" start="0/1s" hasVideo="1" name="whatlurksbeneath_In_this_text_experiences_with_the_entity_known_4f41da26-f1ff-48ab-8139-5e53f83ab492.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_In_this_text_experiences_with_the_entity_known_4f41da26-f1ff-48ab-8139-5e53f83ab492.png" kind="original-media"/>
+        </asset>
+        <asset id="r11" start="0/1s" hasVideo="1" name="whatlurksbeneath_man_in_his_living_room_looking_up_terrified_ph_03193b7a-89ad-4b29-ba8e-761c3d1a3b30.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_man_in_his_living_room_looking_up_terrified_ph_03193b7a-89ad-4b29-ba8e-761c3d1a3b30.png" kind="original-media"/>
+        </asset>
+        <asset id="r12" start="0/1s" hasVideo="1" name="whatlurksbeneath_man_in_white_robes_in_the_forest_8438b716-1d36-48f4-b984-79fee4176cd4.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_man_in_white_robes_in_the_forest_8438b716-1d36-48f4-b984-79fee4176cd4.png" kind="original-media"/>
+        </asset>
+        <asset id="r13" start="0/1s" hasVideo="1" name="whatlurksbeneath_ranger_polaroid_2000s_ef0e2f69-a90e-46cb-89c7-6987f11ecb52.png" duration="0/1s" format="r3">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_ranger_polaroid_2000s_ef0e2f69-a90e-46cb-89c7-6987f11ecb52.png" kind="original-media"/>
+        </asset>
+        <asset id="r14" start="0/1s" hasVideo="1" name="whatlurksbeneath_retired_law_enforcement_photograph_1990s_05ce8bf1-097a-40ef-ae7e-201316eecb61.png" duration="0/1s" format="r3">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_retired_law_enforcement_photograph_1990s_05ce8bf1-097a-40ef-ae7e-201316eecb61.png" kind="original-media"/>
+        </asset>
+        <asset id="r15" start="0/1s" hasVideo="1" name="whatlurksbeneath_two_hikers_in_the_cypress_national_forest_phot_d1f11205-a2dc-4ac6-9e3a-10df7ac63d90.png" duration="0/1s" format="r1">
+            <media-rep src="file://localhost/C:/Users/joshn/Downloads/whatlurksbeneath_two_hikers_in_the_cypress_national_forest_phot_d1f11205-a2dc-4ac6-9e3a-10df7ac63d90.png" kind="original-media"/>
+        </asset>
+        <asset audioChannels="2" id="r16" audioSources="1" hasAudio="1" start="0/1s" name="2023-07-26 12-38-54.mp4" duration="784/15s">
+            <media-rep src="file://localhost/I:/Videos/2023-07-26%2012-38-54.mp4" kind="original-media"/>
+        </asset>
+    </resources>
+    <library>
+        <event name="Timeline 1 (Resolve)">
+            <project name="Timeline 1 (Resolve)">
+                <sequence tcStart="3600/1s" duration="253/5s" tcFormat="NDF" format="r0">
+                    <spine>
+                        <gap offset="3600/1s" start="3600/1s" name="Gap" duration="1/15s">
+                            <clip enabled="1" offset="3600/1s" start="5/3s" lane="2" name="2023-07-26 12-38-54.mp4" duration="253/5s">
+                                <audio offset="0/1s" start="0/1s" duration="784/15s" srcCh="1, 2" ref="r16"/>
+                            </clip>
+                        </gap>
+                        <video enabled="1" offset="54001/15s" start="0/1s" name="whatlurksbeneath_45_year_old_handsome_man_2000s_9f00b25f-09ca-4ab2-80c7-dc6610e9157f.png" duration="61/30s" ref="r2">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="36021/10s" start="0/1s" name="whatlurksbeneath_bigfoot_photograph_polaroid_1990s_5addc393-611c-470d-8fb7-e5e66b095577.png" duration="79/30s" ref="r4">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="54071/15s" start="0/1s" name="whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_6b2254f8-f3c5-4367-8064-5b6eb35d4054.png" duration="103/30s" ref="r5">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="21649/6s" start="0/1s" name="whatlurksbeneath_black_robed_figure_road_night_1990s_photograph_8f0e560c-bbb1-4382-8327-aa548503dcc1.png" duration="61/15s" ref="r6">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="108367/30s" start="0/1s" name="whatlurksbeneath_deep_woods_cabin_wisconsin_polaroid_f82558a3-4534-403e-a6f9-cd68931167de.png" duration="6/1s" ref="r7">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="108547/30s" start="0/1s" name="whatlurksbeneath_fifteen_years_old_1991_photograph_deep_woods_7a817afc-b8e8-44d3-bca8-878877c7c77c.png" duration="79/30s" ref="r8">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="54313/15s" start="0/1s" name="whatlurksbeneath_hiker_in_1984_polaroid_02de07dd-75e7-4a33-aa18-3ec701c0829a.png" duration="173/30s" ref="r9">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="108799/30s" start="0/1s" name="whatlurksbeneath_In_this_text_experiences_with_the_entity_known_4f41da26-f1ff-48ab-8139-5e53f83ab492.png" duration="113/30s" ref="r10">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="18152/5s" start="0/1s" name="whatlurksbeneath_man_in_his_living_room_looking_up_terrified_ph_03193b7a-89ad-4b29-ba8e-761c3d1a3b30.png" duration="103/30s" ref="r11">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="21803/6s" start="0/1s" name="whatlurksbeneath_man_in_white_robes_in_the_forest_8438b716-1d36-48f4-b984-79fee4176cd4.png" duration="187/30s" ref="r12">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="54601/15s" start="0/1s" name="whatlurksbeneath_ranger_polaroid_2000s_ef0e2f69-a90e-46cb-89c7-6987f11ecb52.png" duration="113/30s" ref="r13">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="21863/6s" start="0/1s" name="whatlurksbeneath_retired_law_enforcement_photograph_1990s_05ce8bf1-097a-40ef-ae7e-201316eecb61.png" duration="13/3s" ref="r14">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                        <video enabled="1" offset="21889/6s" start="0/1s" name="whatlurksbeneath_two_hikers_in_the_cypress_national_forest_phot_d1f11205-a2dc-4ac6-9e3a-10df7ac63d90.png" duration="73/30s" ref="r15">
+                            <adjust-transform scale="1 1" position="0 0" anchor="0 0"/>
+                        </video>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

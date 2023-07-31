@@ -1,0 +1,96 @@
+1
+01:00:00,033 --> 01:00:03,400
+<b>So this is a test video. This sample</b>
+
+2
+01:00:03,400 --> 01:00:04,733
+<b>video has been made with</b>
+
+3
+01:00:04,733 --> 01:00:06,633
+<b>DaVinci Resolve, and currently,</b>
+
+4
+01:00:07,166 --> 01:00:09,300
+<b>I am reading from a pre-written script</b>
+
+5
+01:00:09,300 --> 01:00:10,666
+<b>that was actually written</b>
+
+6
+01:00:10,666 --> 01:00:12,233
+<b>before this video was ever</b>
+
+7
+01:00:12,233 --> 01:00:14,966
+<b>constructed. Along with this video, you</b>
+
+8
+01:00:14,966 --> 01:00:16,599
+<b>will notice several random</b>
+
+9
+01:00:16,599 --> 01:00:18,233
+<b>images picked from my own</b>
+
+10
+01:00:18,233 --> 01:00:20,866
+<b>personal library to showcase all the</b>
+
+11
+01:00:20,866 --> 01:00:22,000
+<b>different functionalities</b>
+
+12
+01:00:22,000 --> 01:00:23,633
+<b>that DaVinci Resolve can do.</b>
+
+13
+01:00:24,133 --> 01:00:26,633
+<b>DaVinci Resolve is a robust and</b>
+
+14
+01:00:26,633 --> 01:00:28,233
+<b>fascinating video editor</b>
+
+15
+01:00:28,233 --> 01:00:30,400
+<b>capable of many different feats,</b>
+
+16
+01:00:30,733 --> 01:00:33,833
+<b>such as color grading, advanced editing,</b>
+
+17
+01:00:34,199 --> 01:00:36,400
+<b>as well as other amazing and simple</b>
+
+18
+01:00:36,400 --> 01:00:37,466
+<b>techniques that anyone</b>
+
+19
+01:00:37,533 --> 01:00:40,066
+<b>can use. It doesn't matter if you're a</b>
+
+20
+01:00:40,066 --> 01:00:41,833
+<b>newer video editor or if</b>
+
+21
+01:00:41,833 --> 01:00:43,266
+<b>you're much more experienced.</b>
+
+22
+01:00:43,833 --> 01:00:46,233
+<b>DaVinci Resolve, while it is free, can</b>
+
+23
+01:00:46,233 --> 01:00:48,166
+<b>provide you all of these things at the</b>
+
+24
+01:00:48,166 --> 01:00:49,666
+<b>simple touch of a button.</b>
+
