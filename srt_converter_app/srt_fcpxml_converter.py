@@ -31,7 +31,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
     '''
 
     spine_template = '''
-            <video offset="{OFFSET}" start="0/1s" name="{IMAGE}" ref="{POSITION_NO}" duration="{DURATION}" enabled="1">
+            <video duration="{DURATION}" name="{IMAGE}"  offset="{OFFSET}"  ref="{POSITION_NO}" start="{START}"  enabled="1">
                     <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
             </video> 
     '''
@@ -42,14 +42,14 @@ def convert_to_fcpxml(timecode_description, images_directory):
     texts = timecode_texts[2::2]
     for i, (timecode, text, position_no, image) in enumerate(zip(timecodes, texts, position_nos, images), 1):
         # Convert timecode duration to offset format
-        frame_rate = 30  # Replace with the desired frame rate
+        frame_rate = 24  # Replace with the desired frame rate
         #offset, duration = timecode_to_framerate(timecode, frame_rate)
         #offsets = f"{offset.numerator}/{offset.denominator}s"
         #durations = f"{duration.numerator}/{duration.denominator}s"
         offset, duration = timecode_to_fcpxml(timecode, frame_rate)
-        offsets = f"{offset.numerator}/{offset.denominator}s"
-        durations = f"{duration.numerator}/{duration.denominator}s"
-        
+        offsets = offset
+        durations = duration
+        starts = offset
         
         
         asset_id = str(uuid.uuid4())  # Generate a unique ID for the asset
@@ -63,6 +63,7 @@ def convert_to_fcpxml(timecode_description, images_directory):
             OFFSET=offsets,
             DURATION=durations,
             IMAGE=image_name,
+            START = starts
         )
 
         asset_content = asset_template.format(
@@ -87,40 +88,18 @@ def convert_to_fcpxml(timecode_description, images_directory):
     return fcpxml_base64
 
 
-def timecode_to_framerate(timecode_str, framerate):
-    # Parse the timecode string into offset and duration
-    offset_str, duration_str = timecode_str.strip().split(" --> ")
-    offset_h, offset_m, offset_s_ms = offset_str.split(":")
-    duration_h, duration_m, duration_s_ms = duration_str.split(":")
-    offset_s, offset_ms = offset_s_ms.split(",")
-    duration_s, duration_ms = duration_s_ms.split(",")
-
-    # Convert offset and duration to seconds
-    offset_seconds = int(offset_h) * 3600 + int(offset_m) * 60 + int(offset_s) + int(offset_ms) / 1000.0
-    duration_seconds = int(duration_h) * 3600 + int(duration_m) * 60 + int(duration_s) + int(duration_ms) / 1000.0
-
-    # Calculate fractional offset and duration
-    offset_fraction = Fraction(round(offset_seconds * framerate), framerate)
-    duration_fraction = Fraction(round(duration_seconds * framerate), framerate)
-
-    return offset_fraction, duration_fraction
-
-
-def timecode_to_fcpxml(timecode_str, framerate):
-    offset_str, duration_str = timecode_str.split(" --> ")
-    offset, duration = offset_str.strip(), duration_str.strip()
-
-    # Function to convert timecode string to fractional frame format
-    def to_fractional_frame(timecode):
-        h, m, s_ms = timecode.split(":")
+def timecode_to_fcpxml(timecode, framerate):
+    def timecode_to_fraction(timecode_str, framerate):
+        h, m, s_ms = timecode_str.split(":")
         s, ms = s_ms.split(",")
         total_seconds = int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
         return Fraction(round(total_seconds * framerate), framerate)
 
-    offset_fraction = to_fractional_frame(offset)
-    duration_fraction = to_fractional_frame(duration)
+    offset_str, duration_str = timecode.split(" --> ")
+    offset_fraction = timecode_to_fraction(offset_str.strip(), framerate)
+    duration_fraction = timecode_to_fraction(duration_str.strip(), framerate)
 
-    offset_str = f"{offset_fraction.numerator}/{offset_fraction.denominator}s"
-    duration_str = f"{duration_fraction.numerator}/{duration_fraction.denominator}s"
+    offset = f"{offset_fraction.numerator}/{offset_fraction.denominator}s"
+    duration = f"{duration_fraction.numerator}/{duration_fraction.denominator}s"
 
-    return offset_fraction, duration_fraction
+    return offset, duration

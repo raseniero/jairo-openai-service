@@ -21,7 +21,7 @@ def timecode_to_framerate(timecode_str, framerate):
 
 # Example usage with 30 frames per second (fps) frame rate
 timecode_str = "01:00:00,033 --> 01:00:03,400"
-framerate = 30
+framerate = 24
 
 offset, duration = timecode_to_framerate(timecode_str, framerate)
 print("Offset:", f"{offset.numerator}/{offset.denominator}s")
