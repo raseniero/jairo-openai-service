@@ -72,23 +72,7 @@ def generate_keywords(request):
     user_prompt = request.data.get('user_prompt')
 
     # Define the system_prompt
-    system_prompt = ("I'm going to paste in a timecode script and Treat this like you're making a documentary. "
-                "You have the narration of the script and now you look through the script to start gathering your visual assets. "
-                "You're looking for things in the script that you can type into google image search and get images for to play along visually to the narration track. "
-                "looking through the text, what list would you come up with? simplify it as much as possible, "
-                "that you think would help move the story along visually for each timecode spot, write one keyword or phrase and make a list:\n\n"
-                "The timecode script looks like this:\n"
-                "1 00:00:00,000 --> 00:00:01,800 What would you do if you had\n"
-                "2 00:00:01,800 --> 00:00:03,433 wandered into a canyon\n"
-                "3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear\n"
-                "4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that\n"
-                "5 00:00:07,866 --> 00:00:09,999 fly me to the moon\n\n"
-                "Output should look like this:\n" 
-                "1 00:00:01,800: \"Canyon Exploration\",\n"
-                "2 00:00:01,800: \"Lost in Canyon\",\n"
-                "3   00:00:01,800: \"Mysterious Phantoms\",\n"
-                "4 00:00:01,800: \"Mythical Dog People\",\n"
-                "5 00:00:01,800: \"Decision Making\", ")
+    system_prompt = "I'm going to paste in a timecode script and treat this like you're making a documentary. You have the narration of the script and now you look through the script to start gathering your visual assets. You're looking for things in the script that you can type into google image search and get images for to play along visually to the narration track. looking through the text, what list would you come up with? simplify it as much as possible, that you think would help move the story along visually for each timecode spot, write one keyword or phrase and make a list:  \r\n\r\nThe timecode script looks like this:\r\n1 00:00:00,000 --> 00:00:01,800 What would you do if you had  \r\n2 00:00:01,800 --> 00:00:03,433 wandered into a canyon  \r\n3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear  \r\n4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that  \r\n5 00:00:07,866 --> 00:00:09,999 fly me to the moon\r\n\r\nOutput should look like this:\r\n1 00:00:01,800: \"Canyon Exploration\",\r\n2 00:00:01,800: \"Lost in Canyon\",\r\n3   00:00:01,800: \"Mysterious Phantoms\",\r\n4 00:00:01,800: \"Mythical Dog People\",\r\n5 00:00:01,800: \"Decision Making\", "
     """Function to define generate keywords view"""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
