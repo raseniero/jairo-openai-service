@@ -83,7 +83,7 @@ def generate_keywords(request):
                 "3 00:00:03,433 --> 00:00:05,566 known for phantoms that appear\n"
                 "4 00:00:05,566 --> 00:00:07,866 out of nowhere, dog people that\n"
                 "5 00:00:07,866 --> 00:00:09,999 fly me to the moon\n\n"
-                "Output should look like this:\n"
+                "Output should look like this:\n" 
                 "1 00:00:01,800: \"Canyon Exploration\",\n"
                 "2 00:00:01,800: \"Lost in Canyon\",\n"
                 "3   00:00:01,800: \"Mysterious Phantoms\",\n"
