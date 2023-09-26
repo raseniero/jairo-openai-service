@@ -1,6 +1,6 @@
 from fractions import Fraction
 
-
+#edit
 def timecode_to_framerate(timecode_str, framerate):
     # Parse the timecode string into offset and duration
     offset_str, duration_str = timecode_str.strip().split(" --> ")
