@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     "chatgpt",  # ChatGPT
     'corsheaders', # Cross-Origin Resource Sharing (CORS) to allow requests from Bubble.io to your Django API
     'srt_converter_app',
+    'hyperlink',
+    'jit',
 ]
 
 MIDDLEWARE = [
