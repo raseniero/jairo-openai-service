@@ -23,4 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("chatgpt.urls")),
     path("", include("srt_converter_app.urls")),
+    path("hyperlink/", include('hyperlink.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
