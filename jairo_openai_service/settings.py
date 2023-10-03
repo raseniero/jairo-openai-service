@@ -55,10 +55,13 @@ INSTALLED_APPS = [
     "rest_framework",  # Django REST framework
     "chatgpt",  # ChatGPT
     'corsheaders', # Cross-Origin Resource Sharing (CORS) to allow requests from Bubble.io to your Django API
+    'knox',
     'srt_converter_app',
     'hyperlink',
     'jit',
 ]
+
+AUTH_USER_MODEL = 'hyperlink.User'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
