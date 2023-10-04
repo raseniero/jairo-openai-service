@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 urlpatterns = [
-    path('', views.apiOverview, name='api-overview'),
+    #path('', views.apiOverview, name='api-overview'),
 
     path('seller/', views.getSellerList, name='sellers'),
     path('seller/<str:pk>/', views.getSellerDetail, name='seller-detail'),
@@ -58,4 +60,7 @@ urlpatterns = [
     path('login/', views.login),
     path('user/', views.get_user),
     path('register/', views.register),
+    path("", views.api_hyperlink),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

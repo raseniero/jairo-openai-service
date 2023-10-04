@@ -11,23 +11,49 @@ from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, 
 from rest_framework import status
 
 
-#API ROOT
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls = {
-        'Sellers' : 'http://127.0.0.1:8000/hyperlink/seller/',
-        'Seller Detail View' : '/seller/<str:pk>/',
-        'Create Seller' : '/seller-create',
-        'Update Seller' : '/seller-update/<str:pk>/',
-        'Delete Seller' : '/seller-delete/<str:pk>/',
+from rest_framework.views import APIView
+from rest_framework.reverse import reverse
 
-        'Companies' : '/company',
-        'Company Detail View' : '/company/<str:pk>/',
-        'Create Company' : '/company-create',
-        'Update Company' : '/company-update/<str:pk>/',
-        'Delete Company' : '/company-delete/<str:pk>/',
-    }
-    return Response(api_urls)
+
+#API ROOT
+#@api_view(['GET'])
+#def apiOverview(request):
+    #api_urls = {
+        #'Sellers' : 'http://127.0.0.1:8000/hyperlink/seller/',
+        #'Seller Detail View' : '/seller/<str:pk>/',
+        #'Create Seller' : '/seller-create',
+        #'Update Seller' : '/seller-update/<str:pk>/',
+        #'Delete Seller' : '/seller-delete/<str:pk>/',
+
+        #'Companies' : '/company',
+        #'Company Detail View' : '/company/<str:pk>/',
+        #'Create Company' : '/company-create',
+        #'Update Company' : '/company-update/<str:pk>/',
+        #'Delete Company' : '/company-delete/<str:pk>/',
+    #}
+    #return Response(api_urls)
+
+@api_view(["GET"])
+def api_hyperlink(request, format=None, pk=1):
+    """Function to define api root view"""
+    return Response(
+        {
+            "seller": reverse("sellers", request=request, format=format),
+            
+            "seller-detail": reverse(
+                "seller-detail", kwargs={'pk': pk}, request=request, format=format
+            ),
+            
+            "'seller-create": reverse(
+                "seller-create", request=request, format=format
+            ),
+            
+                "seller-update": reverse(
+                "seller-update", kwargs={'pk': pk}, request=request, format=format
+            )
+
+        }
+    )
 
 
 #fetch all sellers
