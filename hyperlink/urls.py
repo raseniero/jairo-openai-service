@@ -54,4 +54,8 @@ urlpatterns = [
     path('purchased-order/<str:pk>/', views.getPurchasedOrderDetail, name='purchased-order-detail'),
     path('purchased-order-create/', views.purchasedOrderCreate, name='purchased-order-create'),
     path('purchased-order-delete/<str:pk>/', views.purchasedOrderDelete, name='purchased-order-delete'),
+
+    path('login/', views.login),
+    path('user/', views.get_user),
+    path('register/', views.register),
 ]

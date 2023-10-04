@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "chatgpt",  # ChatGPT
     'corsheaders', # Cross-Origin Resource Sharing (CORS) to allow requests from Bubble.io to your Django API
     'knox',
+    'rest_framework.authtoken',
     'srt_converter_app',
     'hyperlink',
     'jit',
@@ -154,4 +155,10 @@ CORS_ORIGIN_WHITELIST = [
     
 ]
 
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        # ... other authentication classes ...
+    ],
+    # ...
+}

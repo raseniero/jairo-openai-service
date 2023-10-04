@@ -3,9 +3,11 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from knox.auth import AuthToken, TokenAuthentication
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
 from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Cart, Placed_Product, Purchased_Order
-from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, CartSerializer, PlacedProductSerializer, PurchasedOrderSerializer
+from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, CartSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer
 from rest_framework import status
 
 
@@ -557,3 +559,51 @@ def purchasedOrderDelete(request, pk):
         # Handle the case where the purchased order with the given ID does not exist
         error_message = "Purchased Order with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)
+
+
+#authentication APIs
+
+def serialize_user(user):
+    return {
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "phone_number" : user.phone_number
+    }
+
+@api_view(['POST'])
+def login(request):
+    serializer = CustomAuthTokenSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.validated_data['user']
+    print(user)
+    token, created = Token.objects.get_or_create(user=user)
+    return Response({
+        'user_data': serialize_user(user),
+        'token': token.key
+    })
+        
+
+@api_view(['POST'])
+def register(request):
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        user = serializer.save()
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            "user_info": serialize_user(user),
+            "token": token.key
+        })
+
+
+@api_view(['GET'])
+def get_user(request):
+    user = request.user
+    if user.is_authenticated:
+        return Response({
+            'user_data': serialize_user(user)
+        })
+    return Response({})
+
+
+
