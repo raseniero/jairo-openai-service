@@ -54,7 +54,7 @@ coverage.xml
 *.log
 *.pot
 local_settings.py
-#db.sqlite3
+db.sqlite3
 media
 
 # Developers
@@ -62,7 +62,7 @@ media
 .DS_Store
 
 # Ignore Django migration files
-#**/migrations/
+**/migrations/
 
 # Ignore Visual Studio Code settings
 .vscode/
