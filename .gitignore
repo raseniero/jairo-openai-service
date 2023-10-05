@@ -62,7 +62,7 @@ media
 .DS_Store
 
 # Ignore Django migration files
-**/migrations/
+#**/migrations/
 
 # Ignore Visual Studio Code settings
 .vscode/
