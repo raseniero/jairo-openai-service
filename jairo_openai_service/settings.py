@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'srt_converter_app',
     'jit',
-    'django_migrate_project',
+
 ]
 
 AUTH_USER_MODEL = 'hyperlink.User'
