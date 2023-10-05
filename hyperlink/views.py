@@ -50,7 +50,15 @@ def api_hyperlink(request, format=None, pk=1):
             
                 "seller-update": reverse(
                 "seller-update", kwargs={'pk': pk}, request=request, format=format
-            )
+            ),
+
+                "company-create": reverse(
+                "company-create", request=request, format=format
+            ),
+
+                "company-update": reverse(
+                "company-update", kwargs={'pk': pk}, request=request, format=format
+            ),
 
         }
     )
