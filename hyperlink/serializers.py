@@ -36,7 +36,7 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
-        # fields = '__all__'
+        
         fields = ['id','email','first_name','last_name','password','phone_number','profile_picture','created_at','modified_at']
 
 class BuyerSerializer(serializers.ModelSerializer):

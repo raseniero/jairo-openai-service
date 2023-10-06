@@ -43,6 +43,8 @@ API_KEYS = ast.literal_eval(api_keys_str)
 
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,13 +55,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",  # Django REST framework
+    'hyperlink',
     "chatgpt",  # ChatGPT
     'corsheaders', # Cross-Origin Resource Sharing (CORS) to allow requests from Bubble.io to your Django API
     'knox',
     'rest_framework.authtoken',
     'srt_converter_app',
-    'hyperlink',
     'jit',
+
 ]
 
 AUTH_USER_MODEL = 'hyperlink.User'

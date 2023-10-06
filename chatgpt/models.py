@@ -9,7 +9,7 @@ class ChatGPT(models.Model):
     assistant_prompt = models.TextField(max_length=200, null=True, default="")
     bot_response = models.TextField(max_length=200, null=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         db_table = "chatgpt"
         verbose_name = "ChatGPT"
@@ -22,6 +22,7 @@ class ChatGPT(models.Model):
 class ApplicationSettings(models.Model):
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
+    
 
     class Meta:
         db_table = "application_settings"

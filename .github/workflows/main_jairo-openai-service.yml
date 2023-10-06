@@ -34,7 +34,7 @@ jobs:
 
       - name: Migrate models
         run: |
-          python manage.py makemigrations chatgpt
+          python manage.py makemigrations hyperlink
           python manage.py migrate
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)

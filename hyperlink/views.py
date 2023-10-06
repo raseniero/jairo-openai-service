@@ -9,6 +9,10 @@ from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, 
 from rest_framework import status
 
 
+from rest_framework.views import APIView
+from rest_framework.reverse import reverse
+
+
 #fetch all sellers
 @api_view(['GET'])
 def getSellerList(request):
