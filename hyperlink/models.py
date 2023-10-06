@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db.models import Sum, F
 
 
 class UserManager(BaseUserManager):
@@ -118,17 +119,42 @@ class Product(models.Model):
         return f'{self.name}'
 
 #
-class Cart(models.Model): 
-    product_name = models.ForeignKey('Product', on_delete=models.CASCADE)
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    total = models.DecimalField(decimal_places=1, max_digits=10)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+class Cart(models.Model):
+    summation = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default=1)
+    created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f'{self.list_of_products}'
-    
+    def update_summation(self):
+        # Calculate the total summation for all associated shopping list items
+        total_summation = self.items.aggregate(total=Sum(F('quantity') * F('price_of_one')))['total']
+        self.summation = total_summation
+        self.save()
+
+class Shopping_List(models.Model):
+    product_name = models.CharField(max_length=100)
+    quantity = models.PositiveIntegerField()
+    price_of_one = models.DecimalField(max_digits=10, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    cart_id = models.ForeignKey("Cart", on_delete=models.CASCADE, related_name='items', null=True)
+
+    def save(self, *args, **kwargs):
+        # Calculate the summation
+        self.summation = self.price_of_one * self.quantity
+
+        super().save(*args, **kwargs)
+
+        # Create a cart if shopping_list is associated with none
+        if not self.cart_id:
+            new_cart = Cart.objects.create()
+            self.cart_id = new_cart
+            super().save(*args, **kwargs)  # Save the shopping_list with the associated cart
+
+        # Update the associated cart's summation
+        self.cart_id.update_summation()
+
+
+
 class Placed_Product(models.Model): 
     product_name = models.CharField(max_length=255, null=False)
     purchased_price = models.DecimalField(decimal_places=1, max_digits=10)

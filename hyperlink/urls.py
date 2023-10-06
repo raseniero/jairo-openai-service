@@ -1,16 +1,16 @@
 from django.urls import path
 from . import views
+from . import endpoints
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-    path('', views.apiOverview, name='api-overview'),
-
-    path('seller/', views.getSellerList, name='sellers'),
+    path('seller/', views.getSellerList, name='seller'),
     path('seller/<str:pk>/', views.getSellerDetail, name='seller-detail'),
     path('seller-create/', views.sellerCreate, name='seller-create'),
     path('seller-update/<str:pk>/', views.sellerUpdate, name='seller-update'),
     path('seller-delete/<str:pk>/', views.sellerDelete, name='seller-delete'),
 
-    path('buyer/', views.getBuyerList, name='buyers'),
+    path('buyer/', views.getBuyerList, name='buyer'),
     path('buyer/<str:pk>/', views.getBuyerDetail, name='buyer-detail'),
     path('buyer-create/', views.buyerCreate, name='buyer-create'),
     path('buyer-delete/<str:pk>/', views.buyerDelete, name='buyer-delete'),
@@ -45,6 +45,12 @@ urlpatterns = [
     path('cart-update/<str:pk>/', views.cartUpdate, name='cart-update'),
     path('cart-delete/<str:pk>/', views.cartDelete, name='cart-delete'),
 
+    path('shopping-list', views.getShoppingList, name='shopping-list'),
+    path('shopping-list/<str:pk>/', views.getShoppingListDetail, name='shopping-list-detail'),
+    path('shopping-list-create/', views.shoppingListCreate, name='shopping-list-create'),
+    path('shopping-list-update/<str:pk>/', views.shoppingListUpdate, name='shopping-list-update'),
+    path('shopping-list-delete/<str:pk>/', views.shopppingListDelete, name='shopping-list-delete'),
+
     path('placed-product/', views.getPlacedProductList, name='placed-product'),
     path('placed-product/<str:pk>/', views.getPlacedProductDetail, name='placed-product-detail'),
     path('placed-product-create/', views.placedProductCreate, name='placed-product-create'),
@@ -55,7 +61,10 @@ urlpatterns = [
     path('purchased-order-create/', views.purchasedOrderCreate, name='purchased-order-create'),
     path('purchased-order-delete/<str:pk>/', views.purchasedOrderDelete, name='purchased-order-delete'),
 
-    path('login/', views.login),
-    path('user/', views.get_user),
-    path('register/', views.register),
+    path('login/', views.login, name='login'),
+    path('user/', views.get_user, name='user'),
+    path('register/', views.register, name='register'),
+    path("", endpoints.api_hyperlink),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

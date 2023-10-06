@@ -1,5 +1,5 @@
 from rest_framework import serializers, validators
-from .models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Cart, Placed_Product, Purchased_Order
+from .models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Placed_Product, Purchased_Order, Cart, Shopping_List
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
@@ -67,6 +67,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
+        fields = '__all__'
+
+class ShoppingListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shopping_List
         fields = '__all__'
 
 class PlacedProductSerializer(serializers.ModelSerializer):

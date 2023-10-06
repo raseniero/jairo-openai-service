@@ -2,32 +2,11 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.auth import AuthToken, TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
-from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Cart, Placed_Product, Purchased_Order
-from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, CartSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer
+from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Placed_Product, Purchased_Order, Cart, Shopping_List
+from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer, CartSerializer, ShoppingListSerializer
 from rest_framework import status
-
-
-#API ROOT
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls = {
-        'Sellers' : 'http://127.0.0.1:8000/hyperlink/seller/',
-        'Seller Detail View' : '/seller/<str:pk>/',
-        'Create Seller' : '/seller-create',
-        'Update Seller' : '/seller-update/<str:pk>/',
-        'Delete Seller' : '/seller-delete/<str:pk>/',
-
-        'Companies' : '/company',
-        'Company Detail View' : '/company/<str:pk>/',
-        'Create Company' : '/company-create',
-        'Update Company' : '/company-update/<str:pk>/',
-        'Delete Company' : '/company-delete/<str:pk>/',
-    }
-    return Response(api_urls)
 
 
 #fetch all sellers
@@ -463,6 +442,68 @@ def cartDelete(request, pk):
         error_message = "Cart with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)
     
+# fetch all shopping list
+@api_view(['GET'])
+def getShoppingList(request):
+    try:
+        shopping_list = Shopping_List.objects.all()
+        serializer = ShoppingListSerializer(shopping_list, many=True)
+        return Response(serializer.data)
+    except Exception as err:
+         return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# fetch a single shoppping_list
+@api_view(['GET'])
+def getShoppingListDetail(request, pk):
+    try:
+        shopping_list = Shopping_List.objects.get(id=pk)
+        serializer = ShoppingListSerializer(shopping_list, many=False)
+        return Response(serializer.data)
+    except Shopping_List.DoesNotExist:
+        # Handle the case where the shopping list with the given ID does not exist
+        error_message = "Shopping List with ID {} does not exist".format(pk)
+        return JsonResponse({'error': error_message}, status=404)
+
+# create a shopping list   
+@api_view(['POST'])
+def shoppingListCreate(request):
+    try:
+        serializer = ShoppingListSerializer(data=request.data)  
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Exception as err:
+        return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# update a shopping list
+@api_view(['PUT'])
+def shoppingListUpdate(request, pk):
+    try:
+        shopping_list = Shopping_List.objects.get(id=pk)
+        serializer = ShoppingListSerializer(instance=shopping_list, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    except Shopping_List.DoesNotExist:
+        # Handle the case where the shopping list with the given ID does not exist
+        error_message = "Shopping List with ID {} does not exist".format(pk)
+        return JsonResponse({'error': error_message}, status=404)    
+
+# delete a shopping_list
+@api_view(['DELETE'])
+def shopppingListDelete(request, pk):
+    try:
+        shopping_list = Shopping_List.objects.get(id=pk)
+        shopping_list.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Shopping_List.DoesNotExist:
+        # Handle the case where the shopping list with the given ID does not exist
+        error_message = "Shopping List with ID {} does not exist".format(pk)
+        return JsonResponse({'error': error_message}, status=404)
+
+    
 #fetch all placed products
 @api_view(['GET'])
 def getPlacedProductList(request):
@@ -563,14 +604,18 @@ def purchasedOrderDelete(request, pk):
 
 #authentication APIs
 
+#data serializer #limits data output field to be shown 
 def serialize_user(user):
     return {
+        "id" : user.id,
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
         "phone_number" : user.phone_number
     }
 
+
+#login authentication and user-generated token
 @api_view(['POST'])
 def login(request):
     serializer = CustomAuthTokenSerializer(data=request.data)
@@ -584,6 +629,7 @@ def login(request):
     })
         
 
+#register user authentication 
 @api_view(['POST'])
 def register(request):
     serializer = RegisterSerializer(data=request.data)
@@ -596,6 +642,7 @@ def register(request):
         })
 
 
+#fetch user details given the correct token of that current user
 @api_view(['GET'])
 def get_user(request):
     user = request.user
