@@ -45,11 +45,11 @@ urlpatterns = [
     path('cart-update/<str:pk>/', views.cartUpdate, name='cart-update'),
     path('cart-delete/<str:pk>/', views.cartDelete, name='cart-delete'),
 
-    path('shopping-list', views.getShoppingList, name='shopping-list'),
-    path('shopping-list/<str:pk>/', views.getShoppingListDetail, name='shopping-list-detail'),
-    path('shopping-list-create/', views.shoppingListCreate, name='shopping-list-create'),
-    path('shopping-list-update/<str:pk>/', views.shoppingListUpdate, name='shopping-list-update'),
-    path('shopping-list-delete/<str:pk>/', views.shopppingListDelete, name='shopping-list-delete'),
+    path('cart-item', views.getCartItemList, name='cart-item'),
+    path('cart-item/<str:pk>/', views.getCartItemDetail, name='cart-item-detail'),
+    path('cart-item-create/', views.cartItemCreate, name='cart-item-create'),
+    path('cart-item-update/<str:pk>/', views.cartItemUpdate, name='cart-item-update'),
+    path('cart-item-delete/<str:pk>/', views.cartItemDelete, name='cart-item-delete'),
 
     path('placed-product/', views.getPlacedProductList, name='placed-product'),
     path('placed-product/<str:pk>/', views.getPlacedProductDetail, name='placed-product-detail'),

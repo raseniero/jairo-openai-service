@@ -4,14 +4,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
-from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Placed_Product, Purchased_Order, Cart, Shopping_List
-from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer, CartSerializer, ShoppingListSerializer
+from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Placed_Product, Purchased_Order, Cart, Cart_Item
+from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer, CartSerializer, CartItemSerializer
 from rest_framework import status
-
-
-from rest_framework.views import APIView
-from rest_framework.reverse import reverse
-
 
 #fetch all sellers
 @api_view(['GET'])
@@ -446,63 +441,64 @@ def cartDelete(request, pk):
         error_message = "Cart with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)
     
-# fetch all shopping list
+# fetch all cart items
 @api_view(['GET'])
-def getShoppingList(request):
+def getCartItemList(request):
     try:
-        shopping_list = Shopping_List.objects.all()
-        serializer = ShoppingListSerializer(shopping_list, many=True)
+        cart_item = Cart_Item.objects.all()
+        serializer = CartItemSerializer(cart_item, many=True)
         return Response(serializer.data)
     except Exception as err:
          return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# fetch a single shoppping_list
+# fetch a single cart item
 @api_view(['GET'])
-def getShoppingListDetail(request, pk):
+def getCartItemDetail(request, pk):
     try:
-        shopping_list = Shopping_List.objects.get(id=pk)
-        serializer = ShoppingListSerializer(shopping_list, many=False)
+        cart_item = Cart_Item.objects.get(id=pk)
+        serializer = CartItemSerializer(cart_item, many=False)
         return Response(serializer.data)
-    except Shopping_List.DoesNotExist:
-        # Handle the case where the shopping list with the given ID does not exist
-        error_message = "Shopping List with ID {} does not exist".format(pk)
+    except Cart_Item.DoesNotExist:
+        # Handle the case where the cart item with the given ID does not exist
+        error_message = "Cart Item with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)
 
-# create a shopping list   
+# create a cart item   
 @api_view(['POST'])
-def shoppingListCreate(request):
+def cartItemCreate(request):
     try:
-        serializer = ShoppingListSerializer(data=request.data)  
+        serializer = CartItemSerializer(data=request.data)  
         if serializer.is_valid():
             serializer.save()
+            print("save")
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as err:
         return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# update a shopping list
+# update a cart item
 @api_view(['PUT'])
-def shoppingListUpdate(request, pk):
+def cartItemUpdate(request, pk):
     try:
-        shopping_list = Shopping_List.objects.get(id=pk)
-        serializer = ShoppingListSerializer(instance=shopping_list, data=request.data)
+        cart_item = Cart_Item.objects.get(id=pk)
+        serializer = CartItemSerializer(instance=cart_item, data=request.data)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
-    except Shopping_List.DoesNotExist:
-        # Handle the case where the shopping list with the given ID does not exist
-        error_message = "Shopping List with ID {} does not exist".format(pk)
+    except Cart_Item.DoesNotExist:
+        # Handle the case where the cart item with the given ID does not exist
+        error_message = "Cart Item with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)    
 
-# delete a shopping_list
+# delete a cart item
 @api_view(['DELETE'])
-def shopppingListDelete(request, pk):
+def cartItemDelete(request, pk):
     try:
-        shopping_list = Shopping_List.objects.get(id=pk)
-        shopping_list.delete()
+        cart_item = Cart_Item.objects.get(id=pk)
+        cart_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    except Shopping_List.DoesNotExist:
+    except Cart_Item.DoesNotExist:
         # Handle the case where the shopping list with the given ID does not exist
         error_message = "Shopping List with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)

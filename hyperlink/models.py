@@ -125,12 +125,12 @@ class Cart(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def update_summation(self):
-        #Calculate the total summation for all associated shopping list items
+        # Calculate the total summation for all associated shopping list items
         total_summation = self.items.aggregate(total=Sum(F('quantity') * F('price_of_one')))['total']
         self.summation = total_summation
         self.save()
 
-class Shopping_List(models.Model):
+class Cart_Item(models.Model):
     product_name = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
     price_of_one = models.DecimalField(max_digits=10, decimal_places=2)
@@ -142,18 +142,15 @@ class Shopping_List(models.Model):
         # Calculate the summation
         self.summation = self.price_of_one * self.quantity
 
-        super().save(*args, **kwargs)
-
-        # Create a cart if shopping_list is associated with none
+        # Create a cart if cart item is associated with none
         if not self.cart_id:
             new_cart = Cart.objects.create()
-            self.cart_id = new_cart
-            super().save(*args, **kwargs)  # Save the shopping_list with the associated cart
+            self.cart_id = new_cart # assign
+        
+        super().save(*args, **kwargs)  # save the cart item with the associated cart
 
         # Update the associated cart's summation
         self.cart_id.update_summation()
-
-
 
 class Placed_Product(models.Model): 
     product_name = models.CharField(max_length=255, null=False)
