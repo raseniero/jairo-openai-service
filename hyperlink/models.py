@@ -125,7 +125,7 @@ class Cart(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def update_summation(self):
-        # Calculate the total summation for all associated shopping list items
+        #Calculate the total summation for all associated shopping list items
         total_summation = self.items.aggregate(total=Sum(F('quantity') * F('price_of_one')))['total']
         self.summation = total_summation
         self.save()
