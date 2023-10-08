@@ -4,6 +4,7 @@ from . import endpoints
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
+    
     path('seller/', views.getSellerList, name='seller'),
     path('seller/<str:pk>/', views.getSellerDetail, name='seller-detail'),
     path('seller-create/', views.sellerCreate, name='seller-create'),

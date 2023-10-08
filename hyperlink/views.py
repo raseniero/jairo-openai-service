@@ -470,7 +470,6 @@ def cartItemCreate(request):
         serializer = CartItemSerializer(data=request.data)  
         if serializer.is_valid():
             serializer.save()
-            print("save")
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -499,8 +498,8 @@ def cartItemDelete(request, pk):
         cart_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Cart_Item.DoesNotExist:
-        # Handle the case where the shopping list with the given ID does not exist
-        error_message = "Shopping List with ID {} does not exist".format(pk)
+        # Handle the case where the cart item with the given ID does not exist
+        error_message = "Cart Item with ID {} does not exist".format(pk)
         return JsonResponse({'error': error_message}, status=404)
 
     

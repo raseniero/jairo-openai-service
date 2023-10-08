@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models import Sum, F
@@ -141,16 +142,30 @@ class Cart_Item(models.Model):
     def save(self, *args, **kwargs):
         # Calculate the summation
         self.summation = self.price_of_one * self.quantity
-
+    
         # Create a cart if cart item is associated with none
         if not self.cart_id:
-            new_cart = Cart.objects.create()
+            new_cart = Cart.objects.create() #initialize
             self.cart_id = new_cart # assign
-        
+
         super().save(*args, **kwargs)  # save the cart item with the associated cart
 
         # Update the associated cart's summation
         self.cart_id.update_summation()
+
+    def delete(self, *args, **kwargs):
+        try:
+            has_cart = self.cart_id is not None
+
+            super().delete(*args, **kwargs)  # Delete the cart item
+
+            if has_cart and self.cart_id.items.count() == 0:
+                self.cart_id.delete()  # Delete the associated cart if it has no items:
+
+            # Update the associated cart's summation
+            self.cart_id.update_summation()
+        except Exception as error:
+            print("Cart has been deleted!")
 
 class Placed_Product(models.Model): 
     product_name = models.CharField(max_length=255, null=False)
