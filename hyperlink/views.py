@@ -102,16 +102,16 @@ def getBuyerDetail(request, pk):
 @api_view(['POST'])
 def buyerCreate(request):
     try:
-        serializer = BuyerSerializer(data=request.data) 
+        serializer = BuyerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as err:
-         return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        return Response({'error': str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    
 # delete a buyer
 @api_view(['DELETE'])
 def buyerDelete(request, pk):

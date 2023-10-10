@@ -1,8 +1,6 @@
-from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models import Sum, F
-
 
 class UserManager(BaseUserManager):
 
@@ -44,7 +42,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=100, null=False)
     password = models.CharField(max_length=255, null=False)
     phone_number = models.CharField(max_length=11, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "email"
 
@@ -54,13 +52,14 @@ class User(AbstractUser):
 
 class Seller(User):
     profile_picture = models.CharField(max_length=100, null=False)
-    modified_at = models.DateTimeField(auto_now=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         # Set is_staff and is_superuser to True for Seller instances
         self.is_staff = True
         self.is_superuser = True
         super().save(*args, **kwargs)
+
 
     class Meta:
         verbose_name = "Seller"
@@ -77,9 +76,9 @@ class Company(models.Model):
     name = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=255, blank=True)
     logo = models.CharField(max_length=100, null=False)                               
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    seller_id = models.ForeignKey('Seller', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name}'
@@ -88,9 +87,9 @@ class Hyperlink(models.Model):
     name = models.CharField(max_length=100, null=False)
     url = models.CharField(max_length=255, null=False, unique=True)
     description = models.CharField(max_length=100, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.url}'
@@ -98,9 +97,9 @@ class Hyperlink(models.Model):
 class Access_Code(models.Model):
     code = models.CharField(max_length=100, null=False)
     activated = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    hyperlink = models.ForeignKey('Hyperlink', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    hyperlink_id = models.ForeignKey('Hyperlink', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.code}'
@@ -111,44 +110,48 @@ class Product(models.Model):
     quantity = models.IntegerField()
     price = models.DecimalField(decimal_places=1, max_digits=10)
     image = models.CharField(max_length=100, null=False)
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
-    hyperlink = models.ForeignKey('Hyperlink', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    seller_id = models.ForeignKey('Seller', on_delete=models.CASCADE)
+    hyperlink_id = models.ForeignKey('Hyperlink', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.name}'
 
-#
+# BUYER PERSPECTIVE MODELS
 class Cart(models.Model):
     summation = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default=1)
+    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE, default=2)
     created = models.DateTimeField(auto_now_add=True)
 
     def update_summation(self):
-        # Calculate the total summation for all associated shopping list items
-        total_summation = self.items.aggregate(total=Sum(F('quantity') * F('price_of_one')))['total']
+        # Calculate the total summation for all associated cart items
+        total_summation = self.items.aggregate(total=Sum(F('quantity') * F('price')))['total']
         self.summation = total_summation
         self.save()
 
 class Cart_Item(models.Model):
     product_name = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
-    price_of_one = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     cart_id = models.ForeignKey("Cart", on_delete=models.CASCADE, related_name='items', null=True)
 
     def save(self, *args, **kwargs):
         # Calculate the summation
-        self.summation = self.price_of_one * self.quantity
-    
-        # Create a cart if cart item is associated with none
-        if not self.cart_id:
-            new_cart = Cart.objects.create() #initialize
-            self.cart_id = new_cart # assign
+        self.summation = self.price * self.quantity
 
-        super().save(*args, **kwargs)  # save the cart item with the associated cart
+        if not self.cart_id:
+            existing_cart = Cart.objects.first()
+
+            if existing_cart:
+                self.cart_id = existing_cart
+            else:
+                new_cart = Cart.objects.create()  #initialize
+                self.cart_id = new_cart  # assign
+
+        super().save(*args, **kwargs)  
 
         # Update the associated cart's summation
         self.cart_id.update_summation()
@@ -162,7 +165,6 @@ class Cart_Item(models.Model):
             if has_cart and self.cart_id.items.count() == 0:
                 self.cart_id.delete()  # Delete the associated cart if it has no items:
 
-            # Update the associated cart's summation
             self.cart_id.update_summation()
         except Exception as error:
             print("Cart has been deleted!")
@@ -172,8 +174,8 @@ class Placed_Product(models.Model):
     purchased_price = models.DecimalField(decimal_places=1, max_digits=10)
     quantity = models.IntegerField()
     subtotal = models.DecimalField(decimal_places=1, max_digits=10)
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -182,9 +184,9 @@ class Purchased_Order(models.Model):
     list_of_placed_products = models.ForeignKey('Placed_Product', on_delete=models.CASCADE)
     total_price = models.DecimalField(decimal_places=1, max_digits=10)
     status = models.CharField(max_length=100, null=False)
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE)
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE)
+    seller_id = models.ForeignKey('Seller', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f'{self.list_of_placed_products}'

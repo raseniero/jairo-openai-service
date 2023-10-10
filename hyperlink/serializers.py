@@ -34,52 +34,77 @@ class CustomAuthTokenSerializer(serializers.Serializer):
         return user, token
 
 class SellerSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Seller
-        
-        fields = ['id','email','first_name','last_name','password','phone_number','profile_picture','created_at','modified_at']
+        fields = ['id','email','first_name','last_name','password','phone_number','profile_picture','created','modified']
 
 class BuyerSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Buyer
-        fields = ['id','email','first_name','last_name','phone_number','address','created_at']        
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'address', 'created']
 
 class CompanySerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Company
         fields = '__all__'
 
 class HyperlinkSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Hyperlink
-        fields = ['id','url', 'description', 'created_at', 'modified_at','company']
+        fields = ['id','url', 'description', 'created', 'modified','company']
 
 class CodeSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Access_Code
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Product
         fields = '__all__'
 
 class CartSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Cart
         fields = '__all__'
 
 class CartItemSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+    modified = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Cart_Item
         fields = '__all__'
 
 class PlacedProductSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta:
         model = Placed_Product
         fields = '__all__'
 
 class PurchasedOrderSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)
+
     class Meta: 
         model = Purchased_Order
         fields = '__all__'

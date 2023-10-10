@@ -134,7 +134,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Manila"
+DATETIME_FORMAT = 'Y-m-d H:i A'
 
 USE_I18N = True
 
