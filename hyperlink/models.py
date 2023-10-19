@@ -71,6 +71,14 @@ class Buyer (User):
     class Meta:
         verbose_name = "Buyer"
         verbose_name_plural = "Buyers"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if not hasattr(self, 'cart'):
+            Cart.objects.create(buyer_id=self)
+        
+         
     
 class Company(models.Model):
     name = models.CharField(max_length=100, null=False)
@@ -121,7 +129,7 @@ class Product(models.Model):
 # BUYER PERSPECTIVE MODELS
 class Cart(models.Model):
     summation = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE, default=2)
+    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     def update_summation(self):

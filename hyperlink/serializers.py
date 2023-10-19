@@ -62,7 +62,7 @@ class HyperlinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hyperlink
-        fields = ['id','url', 'description', 'created', 'modified','company']
+        fields = ['id','url', 'description', 'created', 'modified','company_id']
 
 class CodeSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format='%Y-%m-%d %I:%M %p', read_only=True)

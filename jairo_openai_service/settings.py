@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+from datetime import timedelta
 import os
 import ast
 from dotenv import load_dotenv
@@ -62,7 +63,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'srt_converter_app',
     'jit',
-
 ]
 
 AUTH_USER_MODEL = 'hyperlink.User'

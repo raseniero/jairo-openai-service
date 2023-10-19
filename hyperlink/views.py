@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from datetime import datetime, timedelta
 from django.contrib.auth.hashers import make_password
 from . models import Seller, Buyer, Company, Hyperlink, Access_Code, Product, Placed_Product, Purchased_Order, Cart, Cart_Item
 from . serializers import SellerSerializer, BuyerSerializer, CompanySerializer, HyperlinkSerializer, CodeSerializer, ProductSerializer, PlacedProductSerializer, PurchasedOrderSerializer, CustomAuthTokenSerializer, RegisterSerializer, CartSerializer, CartItemSerializer
@@ -610,7 +611,7 @@ def serialize_user(user):
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "phone_number" : user.phone_number
+        "phone_number" : user.phone_number 
     }
 
 
